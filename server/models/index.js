@@ -1,5 +1,9 @@
 import sequelize from '../config/database.js';
 import User from './user.js';
+import Quiz from './quiz.js';
+import Question from './question.js';
+import Result from './result.js';
+import Attempts from './attempts.js';
 
 const syncModels = async () => {
     try {
@@ -8,6 +12,7 @@ const syncModels = async () => {
     } catch (error) {
       console.error('Error synchronizing models:', error);
     }
+
     // Generate 10 users
     const users = [];
     for (let i = 1; i <= 10; i++) {
@@ -30,6 +35,6 @@ const syncModels = async () => {
   };
   
  export {
-    sequelize, User, syncModels
+    sequelize, User, syncModels, Quiz, Attempts, Result, Question
   };
   

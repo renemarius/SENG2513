@@ -1,11 +1,22 @@
 import { DataTypes } from 'sequelize';
-
 import sequelize from '../config/database.js';
 
+// User Table
 const User = sequelize.define('user', {
-  username: DataTypes.STRING,
-  email: DataTypes.STRING,
-  birthday: DataTypes.DATE,
+  userID: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
 });
 
 User.prototype.toJSON = function() {
