@@ -1,27 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import './index.css';
+import './styles/index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './components/reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <div>
-      <header>
-        <h1>React App</h1>
-        <div></div>
-      </header>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-      <footer>
-        <p>&copy; 2025 Your Project Name</p>
-      </footer>
-    </div>
-
-
+    <App />
   </React.StrictMode>
 );
 
