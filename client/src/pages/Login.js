@@ -1,70 +1,42 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import AuthForm from "../components/AuthForm";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleLogin = (event) => {
+        event.preventDefault(); // Prevent page refresh
 
-    if (!email || !password) {
-      setError("All fields are required.");
-      return;
-    }
+        // Perform local authentication logic
+        if (email === "test@example.com" && password === "password123") {
+            console.log("Login successful");
+            // Redirect or perform further actions upon successful login
+        } else {
+            console.error("Invalid email or password");
+        }
+      
+        // // We'll send the login data to an API endpoint here
+        console.log("Login data:", { email, password });
 
-    // Simulated authentication (Replace with API call)
-    if (email === "user@example.com" && password === "password") {
-      navigate("/quiz"); // Redirect to quiz page
-    } else {
-      setError("Invalid email or password.");
-    }
-  };
+        // Reset form fields after submission
+        setEmail("");
+        setPassword("");
+    };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Email</label>
-            <input
-              type="email"
-              className="w-full p-2 border rounded"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+    return (
+        <div className="d-flex justify-content-center align-items-center">
+            <AuthForm
+                onSubmit={handleLogin}
+                isLogin={true} // Sign-up mode 
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium">Password</label>
-            <input
-              type="password"
-              className="w-full p-2 border rounded"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
-            Login
-          </button>
-        </form>
-        <p className="mt-4 text-sm">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-blue-500">
-            Sign up here
-          </a>
-        </p>
-      </div>
-    </div>
-  );
+        </div>
+    );
+
 };
 
 export default Login;

@@ -12,6 +12,8 @@ const Layout = () => {
     let Navbar;
     if (location.pathname === "/") {
         Navbar = HomeNavbar;
+    } else if (location.pathname === "/login" || location.pathname === "/signup") {
+        Navbar = HomeNavbar;  // Use the same navbar for login and signup pages
     } else if (location.pathname.startsWith("/quiz")) {
         Navbar = QuizNavbar;    // Use a different navbar for quiz pages
     } else {
