@@ -6,7 +6,10 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import https from 'https';
 import fs from 'fs';
-
+import User from './models/user.js';
+import { syncModels } from "./models/index.js";
+import { OAuth2Client } from "google-auth-library";
+import company from "./api/json/company.json" with {type: "json"};
 
 // Configure environment variables first
 dotenv.config();
@@ -14,13 +17,6 @@ dotenv.config();
 // Set up __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Import JSON data
-import company from "./api/json/company.json" with {type: "json"};
-
-// Import models
-import User from './models/user.js';
-import { syncModels } from "./models/index.js";
 
 // Set up Express
 const app = express();
@@ -31,8 +27,19 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 // Configure Google OAuth
-import { OAuth2Client } from "google-auth-library";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+//RapidAPI
+const rapidApiOptions = {
+  method: 'GET',
+  hostname: 'quizmania-api.p.rapidapi.com',
+  port: null,
+  path: '/trivia',
+  headers: {
+    'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+    'X-RapidAPI-Host': 'quizmania-api.p.rapidapi.com'
+  }
+};
 
 // Sync database models
 syncModels();
@@ -43,10 +50,53 @@ app.get("/api/company", (req, res) => {
 });
 
 app.get("/api/user", async (req, res) => {
-  // Find all users
-  const users = await User.findAll();
-  return res.json(users);
+  try {
+    // Find all users
+    const users = await User.findAll();
+    return res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
+
+// Trivia route
+app.get("/api/trivia", (req, res) => {
+  const category = req.query.category || '';
+  const difficulty = req.query.difficulty || '';
+  const amount = req.query.amount || '10';
+  
+  const customPath = `/trivia?category=${category}&difficulty=${difficulty}&amount=${amount}`;
+  
+  const options = {...rapidApiOptions, path: customPath};
+  
+  const request = https.request(options, (response) => {
+    const chunks = [];
+
+    response.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+
+    response.on('end', () => {
+      try {
+        const body = Buffer.concat(chunks);
+        const triviaData = JSON.parse(body.toString());
+        res.json(triviaData);
+      } catch (error) {
+        console.error('Error parsing custom trivia API response:', error);
+        res.status(500).json({ error: 'Failed to fetch custom trivia questions' });
+      }
+    });
+  });
+
+  request.on('error', (error) => {
+    console.error('Error fetching from custom trivia API:', error);
+    res.status(500).json({ error: 'Failed to connect to custom trivia API' });
+  });
+
+  request.end();
+});
+
 
 // Google OAuth authentication endpoint
 app.post("/api/auth/google", async (req, res) => {
