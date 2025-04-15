@@ -1,5 +1,3 @@
-// Home.jsx
-
 import React from "react";
 import QuizSelection from "../components/QuizSelection";
 import QuizOption from "../components/QuizOption";

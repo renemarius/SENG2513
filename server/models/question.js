@@ -13,8 +13,8 @@ const Question = sequelize.define('question', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-        model: Quiz,
-        key: 'quizID',
+      model: Quiz,
+      key: 'quizID',
     },
   },
   question: {
@@ -25,6 +25,18 @@ const Question = sequelize.define('question', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  difficulty: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  options: {
+    type: DataTypes.JSON,
+    allowNull: false,
+  }
 });
 
 
