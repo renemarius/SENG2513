@@ -9,7 +9,6 @@ import fs from 'fs';
 import User from './models/user.js';
 import { syncModels } from "./models/index.js";
 import { OAuth2Client } from "google-auth-library";
-import company from "./api/json/company.json" with {type: "json"};
 
 // Configure environment variables first
 dotenv.config();
