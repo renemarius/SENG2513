@@ -5,12 +5,13 @@ html, body {
     padding: 0;
     min-height: 100vh; /* Prevents white gaps when scrolling */
   }
-  
+ 
   #root {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
   
+
  
   
