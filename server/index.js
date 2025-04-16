@@ -43,11 +43,6 @@ const rapidApiOptions = {
 // Sync database models
 syncModels();
 
-// API Routes
-app.get("/api/company", (req, res) => {
-  return res.json(company);
-});
-
 app.get("/api/user", async (req, res) => {
   try {
     // Find all users
@@ -121,7 +116,13 @@ app.post("/api/auth/google", async (req, res) => {
     // Create or find the user in the database
     let user = await User.findOne({ where: { email } });
     if (!user) {
-      user = await User.create({ email, name, username: name, googleId });
+      user = await User.create({ 
+        email, 
+        name, 
+        username: name, 
+        googleId, 
+        password: "oauth", 
+      });
       console.log("Created new user:", email);
     } else {
       console.log("Found existing user:", email);

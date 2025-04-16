@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import AuthForm from "../components/AuthForm";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
 
     const handleLogin = (event) => {
         event.preventDefault(); // Prevent page refresh
@@ -12,6 +17,8 @@ const Login = () => {
         // Perform local authentication logic
         if (email === "test@example.com" && password === "password123") {
             console.log("Login successful");
+            localStorage.setItem("isLogin", "true");
+            navigate("/profile");
             // Redirect or perform further actions upon successful login
         } else {
             console.error("Invalid email or password");
@@ -36,6 +43,8 @@ const Login = () => {
             .then(res => res.json())
             .then(data => {
                 console.log("Server response:", data);
+                localStorage.setItem("isLogin", "true");
+                navigate("/profile");
                 // Store JWT or user data if needed
             })
             .catch(err => console.error("Auth error", err));
