@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthForm from "../components/AuthForm";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -24,6 +25,30 @@ const Login = () => {
         setPassword("");
     };
 
+    const handleGoogleSuccess = (credentialResponse) => {
+        const token = credentialResponse.credential;
+
+        fetch("https://localhost:3000/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential: token }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Server response:", data);
+                // Store JWT or user data if needed
+            })
+            .catch(err => console.error("Auth error", err));
+
+        console.log("Google credential:", credentialResponse);
+        console.log("Decoded token:", jwtDecode(token));
+    };
+
+    const handleGoogleError = () => {
+        console.log("Google login failed");
+    };
+
+
     return (
         <div className="d-flex justify-content-center align-items-center">
             <AuthForm
@@ -33,6 +58,9 @@ const Login = () => {
                 setEmail={setEmail}
                 password={password}
                 setPassword={setPassword}
+                showGoogleButton={true}
+                onGoogleSuccess={handleGoogleSuccess}
+                onGoogleError={handleGoogleError}
             />
         </div>
     );

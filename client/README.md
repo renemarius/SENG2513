@@ -68,3 +68,32 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+## ⚙️ Environment Setup
+
+### 1. Create `.env` file for Server Configuration
+
+In the `server/` directory, create a `.env` file:
+
+```env
+PORT=3000
+GOOGLE_CLIENT_ID=your_google_client_id_here
+
+In the `client/` directory, create a `.env` file:
+
+```env
+REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id_here
+HTTPS=true
+SSL_CRT_FILE=./localhost.pem
+SSL_KEY_FILE=./localhost-key.pem
+PORT=3000
+
+### 2. Install `mkcert` (Mac only)
+
+```brew install mkcert
+```mkcert -install
+
+Generate local certificates on both client & server:
+
+```mkcert localhost

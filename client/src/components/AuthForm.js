@@ -1,7 +1,8 @@
 import React from "react";
 import "../styles/AuthForm.css"; 
+import { GoogleLogin } from "@react-oauth/google";
 
-const AuthForm = ({ onSubmit, isLogin, email, setEmail, password, setPassword, setFullName, fullName }) => {
+const AuthForm = ({ onSubmit, isLogin, email, setEmail, password, setPassword, setFullName, fullName, showGoogleButton, onGoogleSuccess, onGoogleError }) => {
     return (
         <div className="form-wrapper">
             <div className="form-container">
@@ -46,6 +47,14 @@ const AuthForm = ({ onSubmit, isLogin, email, setEmail, password, setPassword, s
                         {isLogin ? "Login" : "Sign Up"}
                     </button>
                 </form>
+                {showGoogleButton && (
+                    <div className="google-login-wrapper my-3 text-center">
+                        <GoogleLogin
+                            onSuccess={onGoogleSuccess}
+                            onError={onGoogleError}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )
