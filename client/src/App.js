@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import AIQuizPage from "./pages/AIQuizPage";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/ai-quiz" element={<AIQuizPage />} />
           <Route 
             path="/profile" 
             element={

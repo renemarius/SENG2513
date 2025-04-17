@@ -1,5 +1,4 @@
 // server/index.js
-import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,6 +8,8 @@ import fs from 'fs';
 import User from './models/user.js';
 import { syncModels } from "./models/index.js";
 import { OAuth2Client } from "google-auth-library";
+import { generateQuiz } from './api/aiQuiz.js';
+import express from 'express';
 
 // Configure environment variables first
 dotenv.config();
@@ -17,13 +18,25 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Use the port from .env or fallback to 3000 
+const PORT = process.env.PORT || 3000;
+
 // Set up Express
 const app = express();
 app.use(cors({}));
 app.use(express.json());
 
-// Use the port from .env or fallback to 3000 
-const PORT = process.env.PORT || 3000;
+// Improve CORS configuration
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Increase the limit for JSON parsing
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Configure Google OAuth
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -44,6 +57,13 @@ const rapidApiOptions = {
 syncModels();
 
 app.get("/api/user", async (req, res) => {
+  const users = await User.findAll();
+  return res.json(users);
+});
+
+app.post('/api/ai-quiz/generate', generateQuiz);
+
+app.get('/users', async (req, res) => {
   try {
     // Find all users
     const users = await User.findAll();
@@ -53,6 +73,8 @@ app.get("/api/user", async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
+
+//app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 // Trivia route
 app.get("/api/trivia", (req, res) => {
@@ -161,6 +183,13 @@ if (process.env.NODE_ENV === 'production') {
 // Load HTTPS certs
 const key = fs.readFileSync('./localhost-key.pem');
 const cert = fs.readFileSync('./localhost.pem');
+
+const httpsServer = https.createServer({ 
+  key, 
+  cert,
+  maxHeaderSize: 16384 // Increase header size limit (16KB)
+}, app);
+
 
 // Use HTTPS server
 https.createServer({ key, cert }, app).listen(PORT, () => {

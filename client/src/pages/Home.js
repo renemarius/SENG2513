@@ -1,6 +1,7 @@
 // Home.jsx
 
 import React from "react";
+import { Link } from "react-router-dom";
 import QuizSelection from "../components/QuizSelection";
 import QuizOption from "../components/QuizOption";
 
@@ -10,11 +11,13 @@ const Home = () => {
             <div className="col-lg-8 col-md-10 col-sm-12">
                 <QuizSelection />
                 <div className="space-y-3 w-full">
-                    <QuizOption
-                        emoji="🤖"
-                        title="AI-Powered Quiz"
-                        description="Test your knowledge with our AI-generated quizzes."
-                    />
+                    <Link to="/ai-quiz" style={{ textDecoration: 'none' }}>
+                        <QuizOption
+                            emoji="🤖"
+                            title="AI-Powered Quiz"
+                            description="Test your knowledge with our AI-generated quizzes."
+                        />
+                    </Link>
                     <QuizOption
                         emoji="🧠"
                         title="Trivia Database"
