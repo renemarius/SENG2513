@@ -1,4 +1,4 @@
-// src/App.js
+// App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import AIQuizPage from "./pages/AIQuizPage";
+import TakeQuizPage from "./pages/TakeQuizPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/ai-quiz" element={<AIQuizPage />} />
+          <Route path="/take-quiz" element={<TakeQuizPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

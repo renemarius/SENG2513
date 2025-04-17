@@ -1,39 +1,16 @@
 // server/index.js
 import express from "express";
-import company from "./api/json/company.json" with {type: "json"};
-import cors from "cors";
-import User from './models/user.js';
-import { syncModels } from "./models/index.js";
-import dotenv from 'dotenv';
-import { generateQuiz } from './api/aiQuiz.js';
-
-// Only use one dotenv config call
-dotenv.config();
-
-const app = express();
-
-// Improve CORS configuration
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-
-// Increase the limit for JSON parsing
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
-const PORT = 3002;
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import https from 'https';
 import fs from 'fs';
+//import company from "./api/json/company.json" with {type: "json"};
 import User from './models/user.js';
 import { syncModels } from "./models/index.js";
 import { OAuth2Client } from "google-auth-library";
+import { generateQuiz } from './api/aiQuiz.js';
 
 // Configure environment variables first
 dotenv.config();
@@ -44,16 +21,24 @@ const __dirname = path.dirname(__filename);
 
 // Set up Express
 const app = express();
-app.use(cors({}));
-app.use(express.json());
 
-// Use the port from .env or fallback to 3000 
-const PORT = process.env.PORT || 3000;
+// Configure middleware
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Use the port from .env or fallback to 3002
+const PORT = process.env.PORT || 3002;
 
 // Configure Google OAuth
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-//RapidAPI
+// RapidAPI configuration
 const rapidApiOptions = {
   method: 'GET',
   hostname: 'quizmania-api.p.rapidapi.com',
@@ -69,20 +54,12 @@ const rapidApiOptions = {
 syncModels();
 
 // API Routes
-app.get("/api/company", (req, res) => {
-  return res.json(company);
-});
+//app.get("/api/company", (req, res) => {
+ // return res.json(company);
+//});
 
 app.get("/api/user", async (req, res) => {
-  const users = await User.findAll();
-  return res.json(users);
-});
-
-app.post('/api/ai-quiz/generate', generateQuiz);
-
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
   try {
-    // Find all users
     const users = await User.findAll();
     return res.json(users);
   } catch (error) {
@@ -90,6 +67,9 @@ app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
+
+// AI Quiz endpoint
+app.post('/api/ai-quiz/generate', generateQuiz);
 
 // Trivia route
 app.get("/api/trivia", (req, res) => {
@@ -127,7 +107,6 @@ app.get("/api/trivia", (req, res) => {
 
   request.end();
 });
-
 
 // Google OAuth authentication endpoint
 app.post("/api/auth/google", async (req, res) => {
@@ -186,14 +165,21 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Start the server
-//app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-
-// Load HTTPS certs
-const key = fs.readFileSync('./localhost-key.pem');
-const cert = fs.readFileSync('./localhost.pem');
-
-// Use HTTPS server
-https.createServer({ key, cert }, app).listen(PORT, () => {
-  console.log(`Secure server listening on https://localhost:${PORT}`);
-});
+// Choose one server startup method based on environment
+if (process.env.USE_HTTPS === 'true' && fs.existsSync('./localhost-key.pem') && fs.existsSync('./localhost.pem')) {
+  // HTTPS setup
+  try {
+    const key = fs.readFileSync('./localhost-key.pem');
+    const cert = fs.readFileSync('./localhost.pem');
+    https.createServer({ key, cert }, app).listen(PORT, () => {
+      console.log(`Secure server listening on https://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Error starting HTTPS server:', error);
+    // Fallback to HTTP if HTTPS fails
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT} (HTTP fallback)`));
+  }
+} else {
+  // HTTP setup
+  app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+}
