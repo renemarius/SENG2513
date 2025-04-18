@@ -10,10 +10,12 @@ const Layout = () => {
 
     // Choose Navbar based on the current route
     let Navbar;
-    if (location.pathname === "/" || location.pathname === "/ai-quiz") {
-        // Include AI Quiz in the HomeNavbar routes
-        Navbar = HomeNavbar;
-    } else if (location.pathname === "/login" || location.pathname === "/signup") {
+    if (
+      location.pathname === "/" ||
+      location.pathname === "/ai-quiz" ||
+      location.pathname === "/login" ||
+      location.pathname === "/signup"
+    ) {
         Navbar = HomeNavbar;  // Use the same navbar for login and signup pages
     } else if (location.pathname.startsWith("/quiz")) {
         Navbar = QuizNavbar;    // Use a different navbar for quiz pages
@@ -22,7 +24,7 @@ const Layout = () => {
     }
     
     return (
-        <div className="App bg-black d-flex flex-column min-vh-100">
+        <div className="App d-flex bg-black flex-column min-vh-100">
             {Navbar && <Navbar />}
             <main>
                 <Outlet />  {/* Render the active page */}

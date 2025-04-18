@@ -18,13 +18,13 @@ const Login = () => {
         if (email === "test@example.com" && password === "password123") {
             console.log("Login successful");
             localStorage.setItem("isLogin", "true");
-            navigate("/profile");
+            navigate("/home");
             // Redirect or perform further actions upon successful login
         } else {
             console.error("Invalid email or password");
         }
       
-        // // We'll send the login data to an API endpoint here
+        //We'll send the login data to an API endpoint here
         console.log("Login data:", { email, password });
 
         // Reset form fields after submission
@@ -35,7 +35,7 @@ const Login = () => {
     const handleGoogleSuccess = (credentialResponse) => {
         const token = credentialResponse.credential;
 
-        fetch("https://localhost:3000/api/auth/google", {
+        fetch("https://localhost:3001/api/auth/google", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ credential: token }),
@@ -44,7 +44,8 @@ const Login = () => {
             .then(data => {
                 console.log("Server response:", data);
                 localStorage.setItem("isLogin", "true");
-                navigate("/profile");
+                localStorage.setItem("userName", data.user.username);
+                navigate("/");
                 // Store JWT or user data if needed
             })
             .catch(err => console.error("Auth error", err));

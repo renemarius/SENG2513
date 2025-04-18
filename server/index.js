@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import https from 'https';
 import fs from 'fs';
+//import company from "./api/json/company.json" with {type: "json"};
 import User from './models/user.js';
 import { syncModels } from "./models/index.js";
 import { OAuth2Client } from "google-auth-library";
@@ -19,12 +20,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Use the port from .env or fallback to 3000 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Set up Express
 const app = express();
-app.use(cors({}));
-app.use(express.json());
+
+// Configure middleware
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Improve CORS configuration
 app.use(cors({
@@ -41,7 +50,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Configure Google OAuth
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-//RapidAPI
+// RapidAPI configuration
 const rapidApiOptions = {
   method: 'GET',
   hostname: 'quizmania-api.p.rapidapi.com',
@@ -65,7 +74,6 @@ app.post('/api/ai-quiz/generate', generateQuiz);
 
 app.get('/users', async (req, res) => {
   try {
-    // Find all users
     const users = await User.findAll();
     return res.json(users);
   } catch (error) {
@@ -112,7 +120,6 @@ app.get("/api/trivia", (req, res) => {
 
   request.end();
 });
-
 
 // Google OAuth authentication endpoint
 app.post("/api/auth/google", async (req, res) => {

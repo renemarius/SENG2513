@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function AIQuizGenerator() {
   const [topic, setTopic] = useState('');
@@ -8,6 +9,7 @@ function AIQuizGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [quizData, setQuizData] = useState(null);
+  const navigate = useNavigate();
 
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
@@ -37,6 +39,16 @@ function AIQuizGenerator() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleStartQuiz = () => {
+    navigate('/take-quiz', { 
+      state: { 
+        questions: quizData,
+        topic: topic,
+        difficulty: difficulty
+      } 
+    });
   };
 
   return (
@@ -101,11 +113,7 @@ function AIQuizGenerator() {
           <p>{quizData.length} questions about {topic}</p>
           <button 
             className="btn btn-success"
-            onClick={() => {
-              // You'll need to implement this to navigate to your quiz UI
-              console.log("Starting quiz with:", quizData);
-              // This is where you'd integrate with your existing quiz UI
-            }}
+            onClick={handleStartQuiz}
           >
             Start Quiz
           </button>

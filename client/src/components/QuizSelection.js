@@ -19,13 +19,20 @@ const QuizSelection = () => {
         fontSize: '1rem',
         marginBottom: '20px',
         color: '#ffffff',
-    };    
+    };
+    
+    const isLogin = localStorage.getItem("isLogin") === "true";
     return (
         <div style={containerStyle}>
             <h1 style={headingStyle}>Choose Your Quiz Experience</h1>
             <p style={paragraphStyle}>
-                Select from our AI-powered quizzes or explore our trivia database
+            Select from our AI-powered quizzes or explore our trivia database
             </p>
+            {!isLogin && (
+                <p style={{ ...paragraphStyle, fontSize: "0.85rem", opacity: 0.8 }}>
+                    Sign up or Login to save your quizzes, track progress, and more!
+                </p>
+            )}
         </div>
     );
 };

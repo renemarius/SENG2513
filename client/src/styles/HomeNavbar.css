@@ -27,6 +27,21 @@
     gap: 20px; /* Adjust the gap between icon and links */
   }
 
+  .welcome-message {
+    white-space: nowrap;          /* Prevent awkward text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;      /* Show "..." if too long */
+    max-width: 200px;             /* Adjust to fit your layout */
+    margin: auto;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .welcome-message {
+      display: none;              /* Optionally hide it on small screens */
+    }
+  }
+  
+
   .icon {
     padding-bottom: 13px;
   }
