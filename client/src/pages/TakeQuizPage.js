@@ -1,4 +1,4 @@
-// src/pages/TakeQuizPage.js
+// In TakeQuizPage.js
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,22 +9,20 @@ function TakeQuizPage() {
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [showExplanations, setShowExplanations] = useState(false);
   const [quizData, setQuizData] = useState([]);
   const [quizTopic, setQuizTopic] = useState('');
-  const [error, setError] = useState(null);
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [totalAttempts, setTotalAttempts] = useState(0);
   
   useEffect(() => {
-    console.log("TakeQuizPage mounted, state:", location.state);
-    
-    // Check if we have quiz data passed through navigation state
     if (location.state?.questions) {
       setQuizData(location.state.questions);
       setQuizTopic(location.state.topic || 'Quiz');
-      console.log("Quiz data loaded:", location.state.questions.length, "questions");
+      // Initialize userAnswers array with empty strings
+      setUserAnswers(new Array(location.state.questions.length).fill(''));
     } else {
-      console.error("No quiz data found in navigation state");
-      setError("No quiz data found. Please generate a quiz first.");
-      // Don't navigate away immediately, show an error message instead
+      navigate('/ai-quiz');
     }
   }, [location, navigate]);
 
@@ -33,7 +31,12 @@ function TakeQuizPage() {
   };
 
   const handleNextQuestion = () => {
-    // Check if answer is correct and update score
+    // Save the user's answer for the current question
+    const newUserAnswers = [...userAnswers];
+    newUserAnswers[currentQuestion] = selectedAnswer;
+    setUserAnswers(newUserAnswers);
+    
+    // Check if the answer is correct and update score
     if (selectedAnswer === quizData[currentQuestion].correctAnswer) {
       setScore(score + 1);
     }
@@ -44,45 +47,38 @@ function TakeQuizPage() {
       setSelectedAnswer('');
     } else {
       setShowResults(true);
+      // Increment total attempts when quiz is completed
+      setTotalAttempts(totalAttempts + 1);
     }
   };
 
-  const handleRestartQuiz = () => {
+  const handleRetakeQuiz = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer('');
+    setScore(0);
+    setShowResults(true);
+    setShowExplanations(false);
+    // Clear user answers
+    setUserAnswers(new Array(quizData.length).fill(''));
+    // Reset to review page when retaking
+    setShowResults(false);
+  };
+
+  const handleShowExplanations = () => {
+    setShowExplanations(true);
+  };
+
+  const handleContinueTrying = () => {
+    // Reset to first question for another attempt
     setCurrentQuestion(0);
     setSelectedAnswer('');
     setScore(0);
     setShowResults(false);
+    // Keep user's previous answers for reference
   };
 
-  // If there's an error, show it
-  if (error) {
-    return (
-      <div className="container mt-5 text-center">
-        <div className="alert alert-danger">
-          {error}
-          <div className="mt-3">
-            <button 
-              className="btn btn-primary" 
-              onClick={() => navigate('/ai-quiz')}
-            >
-              Back to Quiz Generator
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // If there's no quiz data yet, show loading
   if (quizData.length === 0) {
-    return (
-      <div className="container mt-5 text-center">
-        <p>Loading quiz data...</p>
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+    return <div className="container mt-5 text-center">Loading quiz data...</div>;
   }
 
   return (
@@ -123,19 +119,77 @@ function TakeQuizPage() {
             </button>
           </div>
         </div>
-      ) : (
+      ) : !showExplanations ? (
         <div className="card bg-dark text-white border">
           <div className="card-body text-center">
             <h2>Quiz Results</h2>
             <h3>Your Score: {score} out of {quizData.length}</h3>
             <p>You got {Math.round((score / quizData.length) * 100)}%</p>
             
-            <button className="btn btn-primary me-2" onClick={handleRestartQuiz}>
-              Retake Quiz
-            </button>
-            <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
-              Generate New Quiz
-            </button>
+            {totalAttempts >= 2 ? (
+              <div className="mt-4">
+                <p>You've attempted this quiz {totalAttempts} times. Would you like to see the explanations or try again?</p>
+                <button className="btn btn-info me-2" onClick={handleShowExplanations}>
+                  Show Explanations
+                </button>
+                <button className="btn btn-primary me-2" onClick={handleContinueTrying}>
+                  Try Again
+                </button>
+                <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+                  New Quiz
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4">
+                <button className="btn btn-primary me-2" onClick={handleContinueTrying}>
+                  Try Again
+                </button>
+                <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+                  New Quiz
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="card bg-dark text-white border">
+          <div className="card-body">
+            <h2 className="text-center mb-4">Explanations</h2>
+            
+            {quizData.map((question, index) => (
+              <div key={index} className="mb-4 p-3 border rounded">
+                <h4>{index + 1}. {question.question}</h4>
+                
+                <div className="options mt-2">
+                  {question.options.map((option, optIndex) => (
+                    <div key={optIndex} className={`mb-1 ${
+                      option === question.correctAnswer 
+                        ? 'text-success fw-bold' 
+                        : option === userAnswers[index]
+                          ? 'text-danger' 
+                          : ''
+                    }`}>
+                      {option} {option === question.correctAnswer && '✓'} 
+                      {option === userAnswers[index] && option !== question.correctAnswer && '✗'}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="explanation mt-3 p-2 bg-dark border-info border rounded">
+                  <h5>Explanation:</h5>
+                  <p>{question.explanation}</p>
+                </div>
+              </div>
+            ))}
+            
+            <div className="text-center mt-4">
+              <button className="btn btn-primary me-2" onClick={handleRetakeQuiz}>
+                Retake Quiz
+              </button>
+              <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+                New Quiz
+              </button>
+            </div>
           </div>
         </div>
       )}

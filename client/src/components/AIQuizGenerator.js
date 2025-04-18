@@ -22,7 +22,7 @@ function AIQuizGenerator() {
     setError(null);
     
     try {
-      const response = await axios.post('http://localhost:3002/api/ai-quiz/generate', {
+      const response = await axios.post('http://localhost:3000/api/ai-quiz/generate', {
         topic,
         numberOfQuestions,
         difficulty
