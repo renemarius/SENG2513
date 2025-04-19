@@ -8,13 +8,16 @@ import Footer from "./Footer";
 const Layout = () => {
     const location = useLocation();
 
+    const isLogin = localStorage.getItem("isLogin") === "true";
+
     // Choose Navbar based on the current route
     let Navbar;
     if (
       location.pathname === "/" ||
       location.pathname === "/ai-quiz" ||
       location.pathname === "/login" ||
-      location.pathname === "/signup"
+      location.pathname === "/signup" ||
+      location.pathname === "/profile"
     ) {
         Navbar = HomeNavbar;  // Use the same navbar for login and signup pages
     } else if (location.pathname.startsWith("/quiz")) {
@@ -24,7 +27,10 @@ const Layout = () => {
     }
     
     return (
-        <div className="App d-flex bg-black flex-column min-vh-100">
+        <div className={`App d-flex flex-column min-vh-100 ${
+            isLogin ? "bg-secondary" : "bg-black"
+        }`}>
+
             {Navbar && <Navbar />}
             <main>
                 <Outlet />  {/* Render the active page */}

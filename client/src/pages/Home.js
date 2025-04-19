@@ -8,9 +8,7 @@ const Home = () => {
     const isLogin = localStorage.getItem("isLogin") === "true";
     return (
         <div
-            className={`container-fluid row justify-content-center ${
-                isLogin ? "bg-secondary" : "bg-black"
-            }`}
+            className="container-fluid row justify-content-center"
             style={{ paddingBottom: '35px', margin: 0}}
             >
             <div className="col-lg-8 col-md-10 col-sm-12">

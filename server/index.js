@@ -11,6 +11,7 @@ import { OAuth2Client } from "google-auth-library";
 import { generateQuiz } from './api/aiQuiz.js';
 import express from 'express';
 import authRoutes from './routes/auth.js';
+import profileRoutes from './routes/profile.js'; 
 
 // Configure environment variables first
 dotenv.config();
@@ -58,24 +59,11 @@ const rapidApiOptions = {
 // Sync database models
 syncModels();
 
-app.get("/api/user", async (req, res) => {
-  const users = await User.findAll();
-  return res.json(users);
-});
+// Profile route
+app.use("/api/user", profileRoutes);
 
 app.post('/api/ai-quiz/generate', generateQuiz);
 
-app.get('/users', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    return res.json(users);
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
-
-//app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 // Trivia route
 app.get("/api/trivia", (req, res) => {
@@ -176,9 +164,6 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API server is running. Frontend is available at http://localhost:3000');
   });
 }
-
-// Start the server
-//app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 // Load HTTPS certs
 const key = fs.readFileSync('./localhost-key.pem');

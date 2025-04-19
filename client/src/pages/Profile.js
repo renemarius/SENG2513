@@ -1,39 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import icon from "../assets/person-icon-1.png";
+import "../styles/profile.css";
 
 const Profile = () => {
-    const user = {
-        name: "User Name",
-        email: "useremail@mail.com",
-        joined: "February 2025",
-        quizzesCompleted: 30,
-        averageScore: "85%",
-        questionsAnswered: 145,
-    };
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        joined: "",
+        quizzesCompleted: 0,
+        averageScore: "0%",
+        questionsAnswered: 0,
+    });
+    
+    useEffect(() => {
+        const userID = localStorage.getItem("userID");
+        console.log("USER ID:",userID);
+    
+        const fetchUserInfo = async () => {
+            const res = await fetch(`https://localhost:3001/api/user/${userID}`);
+            const data = await res.json();
+            setUser(prev => ({
+                ...prev,
+                name: data.username,
+                email: data.email,
+                joined: new Date(data.joined).toLocaleString("default", { month: "long", year: "numeric" }),
+            }));
+        };
+    
+        const fetchStats = async () => {
+            const res = await fetch(`https://localhost:3001/api/user/${userID}/stats`);
+            const stats = await res.json();
+            setUser(prev => ({ ...prev, ...stats }));
+        };
+    
+        fetchUserInfo();
+        fetchStats();
+    }, []);
 
     return (
-        <div className="bg-black text-white min-h-screen px-8 py-6">
-            <div className="max-w-3xl mx-auto bg-gray-900 rounded-lg p-6">
-                <div className="flex gap-6 items-center mb-6">
-                    <div className="w-24 h-24 rounded-full bg-gray-700"></div>
-                    <div>
-                        <h2 className="text-2xl font-bold">{user.name}</h2>
-                        <p className="text-gray-400">{user.email}</p>
-                        <p className="text-gray-500">Joined {user.joined}</p>
+        <div className="text-white min-h-screen px-8 py-6">
+            <div className="d-flex align-items-center gap-4 mb-5 " style={{ padding: "50px 50px" }} >
+                <div className="position-relative d-inline-block">
+                    <div
+                        className="position-absolute top-0 start-0 w-100 h-100 rounded-circle"
+                        style={{
+                        backgroundColor: "#237ac3",
+                        filter: "blur(10px)",
+                        zIndex: 0,
+                        }}
+                    />
+                    <img
+                        src={icon}
+                        alt="profile"
+                        className="rounded-circle position-relative"
+                        style={{
+                        width: "160px",
+                        height: "160px",
+                        objectFit: "cover",
+                        border: "4px solid #237ac3",
+                        zIndex: 1,
+                        }}
+                    />
+                    </div>
+
+                <div style={{ fontSize: "1.25rem", color: "#cfe9ff", }}>
+                    <h2 className="fw-bold fs-3 mb-1">{user.name}</h2>
+                    <p className="mb-1">{user.email}</p>
+                    <p className="mb-1">Joined {user.joined}</p>
+                </div>
+            </div>
+            <div className="row px-5 g-4">
+                <div className="col-md-6">
+                    <div className="stat-card bg-dark p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.quizzesCompleted}</h3>
+                        <p className="mt-2">Quizzes Completed</p>
                     </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-6 mt-6">
-                    <div className="bg-gray-800 p-6 rounded-lg border border-indigo-600">
-                        <h3 className="text-3xl font-bold text-indigo-400">{user.quizzesCompleted}</h3>
-                        <p className="text-gray-400 mt-2">Quizzes Completed</p>
+                <div className="col-md-6">
+                    <div className="stat-card bg-dark p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.averageScore}</h3>
+                        <p className="mt-2">Average Score</p>
                     </div>
-                    <div className="bg-gray-800 p-6 rounded-lg border border-indigo-600">
-                        <h3 className="text-3xl font-bold text-indigo-400">{user.averageScore}</h3>
-                        <p className="text-gray-400 mt-2">Average Score</p>
-                    </div>
-                    <div className="bg-gray-800 p-6 rounded-lg border border-indigo-600 col-span-2">
-                        <h3 className="text-3xl font-bold text-indigo-400">{user.questionsAnswered}</h3>
-                        <p className="text-gray-400 mt-2">Questions Answered</p>
+                </div>
+                <div className="col-12">
+                    <div className="stat-card bg-dark p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.questionsAnswered}</h3>
+                        <p className="mt-2">Questions Answered</p>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+  
     const navigate = useNavigate();
 
 
@@ -23,10 +23,12 @@ const Login = () => {
             });
     
             const data = await response.json();
+            console.log("Raw response data:", data);
 
             if (response.ok) {
                 localStorage.setItem("isLogin", "true");
                 localStorage.setItem("userName", data.userName);
+                localStorage.setItem("userID", String(data.userID));
                 navigate("/");
             } else {
                 alert(data.message || "Signup failed");
@@ -54,6 +56,7 @@ const Login = () => {
                 console.log("Server response:", data);
                 localStorage.setItem("isLogin", "true");
                 localStorage.setItem("userName", data.user.username);
+                localStorage.setItem("userID", String(data.user.userID));
                 navigate("/");
                 // Store JWT or user data if needed
             })
