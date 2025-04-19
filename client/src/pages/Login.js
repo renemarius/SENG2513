@@ -11,21 +11,30 @@ const Login = () => {
     const navigate = useNavigate();
 
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault(); // Prevent page refresh
 
         // Perform local authentication logic
-        if (email === "test@example.com" && password === "password123") {
-            console.log("Login successful");
-            localStorage.setItem("isLogin", "true");
-            navigate("/home");
-            // Redirect or perform further actions upon successful login
-        } else {
-            console.error("Invalid email or password");
+        try {
+            const response = await fetch("https://localhost:3001/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("isLogin", "true");
+                localStorage.setItem("userName", data.userName);
+                navigate("/");
+            } else {
+                alert(data.message || "Signup failed");
+            }
+        } catch (err) {
+            console.error("Signup error:", err);
+            alert("Signup failed. Try again later.");
         }
-      
-        //We'll send the login data to an API endpoint here
-        console.log("Login data:", { email, password });
 
         // Reset form fields after submission
         setEmail("");
