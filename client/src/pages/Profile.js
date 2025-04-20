@@ -70,22 +70,22 @@ const Profile = () => {
             </div>
             <div className="row px-5 g-4">
                 <div className="col-md-6">
-                    <div className="stat-card bg-dark p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                    <div className="stat-card p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
                         <h3 className="display-5" style={{ color: "#237ac3", }} >{user.quizzesCompleted}</h3>
                         <p className="mt-2">Quizzes Completed</p>
                     </div>
                 </div>
                 <div className="col-md-6">
-                    <div className="stat-card bg-dark p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                    <div className="stat-card p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
                         <h3 className="display-5" style={{ color: "#237ac3", }} >{user.averageScore}</h3>
                         <p className="mt-2">Average Score</p>
                     </div>
                 </div>
                 <div className="col-12">
-                    <div className="stat-card bg-dark p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", }}>
+                    <div className="stat-card p-4 text-center rounded" 
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
                         <h3 className="display-5" style={{ color: "#237ac3", }} >{user.questionsAnswered}</h3>
                         <p className="mt-2">Questions Answered</p>
                     </div>

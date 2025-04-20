@@ -6,7 +6,6 @@
     text-align: center;
     border: 1px solid #237ac3; /* Subtle border */
     border-radius: 10px; /* Rounded corners */
-    padding: 30px;
     width: 90%; /* Full width by default */
     max-width: 400px; /* Adjust this to make the form smaller or larger */
     background-color: #1a1a1a; /* Dark background */
@@ -20,9 +19,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 70vh; /* Prevents the form from being too tall */
+    min-height: calc(100vh - 120px); /* Adjust for navbar + footer height */
     width: 100vw; /* Full viewport width */
-    padding: 80px; /* Add padding for spacing */
+    padding: 50px; /* Add padding for spacing */
 }
 
 /* Form Title */
@@ -65,16 +64,12 @@ h1 {
     text-decoration: none;
     font-size: 0.8rem;
     padding: 8px 16px;
-    border: 2px solid #237ac3;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-    background: transparent; 
-    cursor: pointer;
     width: 100px;
 }
 
 .btn-signup:hover {
     background-color: #237ac3;
+    transform: scale(1.05);
 }
 
 /* Responsive styles */

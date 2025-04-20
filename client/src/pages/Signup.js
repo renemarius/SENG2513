@@ -1,8 +1,8 @@
 // Signup.js
 import React, { useState } from "react";
 import AuthForm from "../components/AuthForm";
-//import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Signup = () => {
     const [userName, setUserName] = useState("");
@@ -42,17 +42,47 @@ const Signup = () => {
         setPassword("");
     };
 
+    const handleGoogleSuccess = (credentialResponse) => {
+        const token = credentialResponse.credential;
+
+        fetch("https://localhost:3001/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential: token }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Server response:", data);
+                localStorage.setItem("isLogin", "true");
+                localStorage.setItem("userName", data.user.username);
+                localStorage.setItem("userID", String(data.user.userID));
+                navigate("/");
+                // Store JWT or user data if needed
+            })
+            .catch(err => console.error("Auth error", err));
+
+        console.log("Google credential:", credentialResponse);
+        console.log("Decoded token:", jwtDecode(token));
+    };
+    
+    const handleGoogleError = () => {
+        console.log("Google login failed");
+    };
+
     return (
         <div className="d-flex justify-content-center align-items-center">
             <AuthForm
                 onSubmit={handleSignup}
-                isLogin={false} // Sign-up mode 
+                isLogin={false}
                 userName={userName}
                 setUserName={setUserName}
                 email={email}
                 setEmail={setEmail}
                 password={password}
                 setPassword={setPassword}
+                showGoogleButton={true}
+                onGoogleSuccess={handleGoogleSuccess}
+                onGoogleError={handleGoogleError}
             />
         </div>
     );
