@@ -5,9 +5,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import https from 'https';
 import fs from 'fs';
-import User from './models/user.js';
 import { syncModels } from "./models/index.js";
-import { OAuth2Client } from "google-auth-library";
 import { generateQuiz } from './routes/aiQuiz.js';
 import express from 'express';
 import authRoutes from './routes/auth.js';
@@ -40,9 +38,6 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Set up auth routes
 app.use('/api/auth', authRoutes);
-
-// Configure Google OAuth
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // RapidAPI configuration
 const rapidApiOptions = {
@@ -100,50 +95,6 @@ app.get("/api/trivia", (req, res) => {
   });
 
   request.end();
-});
-
-// Google OAuth authentication endpoint
-app.post("/api/auth/google", async (req, res) => {
-  const { credential } = req.body;
-  
-  if (!credential) {
-    return res.status(400).json({ error: "Missing credential" });
-  }
-  
-  try {
-    console.log("Verifying token with client ID:", process.env.GOOGLE_CLIENT_ID);
-    
-    const ticket = await client.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    
-    const payload = ticket.getPayload();
-    const { email, name, picture, sub: googleId } = payload;
-    
-    console.log("Authentication successful for:", email);
-    
-    // Create or find the user in the database
-    let user = await User.findOne({ where: { email } });
-    if (!user) {
-      user = await User.create({ 
-        email, 
-        name, 
-        username: name, 
-        googleId, 
-        password: "oauth", 
-      });
-      console.log("Created new user:", email);
-    } else {
-      console.log("Found existing user:", email);
-    }
-    
-    // You could create a JWT here and send it back
-    res.json({ message: "Login successful", user });
-  } catch (error) {
-    console.error("OAuth error:", error.message);
-    res.status(401).json({ error: "Invalid token" });
-  }
 });
 
 // Serve static files in production

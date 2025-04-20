@@ -2,9 +2,14 @@
 import express from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
+import { OAuth2Client } from "google-auth-library";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const router = express.Router();
 
+// Signup route
 router.post("/signup", async (req, res) => {
     const { userName, email, password } = req.body;
 
@@ -32,6 +37,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+// Login route
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -52,6 +58,44 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// Google route
+router.post("/google", async (req, res) => {
+    const { credential } = req.body;
+    
+    if (!credential) {
+        return res.status(400).json({ error: "Missing credential" });
+    }
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { email, name, picture, sub: googleId } = payload;
+
+        let user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            user = await User.create({ 
+                email, 
+                name, 
+                username: name, 
+                googleId, 
+                password: "oauth" // Placeholder for consistency
+            });
+        }
+
+        res.json({ message: "Login successful", user });
+    } catch (error) {
+        console.error("OAuth error:", error.message);
+        res.status(401).json({ error: "Invalid token" });
     }
 });
 
