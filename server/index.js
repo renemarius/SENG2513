@@ -8,7 +8,7 @@ import fs from 'fs';
 import User from './models/user.js';
 import { syncModels } from "./models/index.js";
 import { OAuth2Client } from "google-auth-library";
-import { generateQuiz } from './api/aiQuiz.js';
+import { generateQuiz } from './routes/aiQuiz.js';
 import express from 'express';
 import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js'; 

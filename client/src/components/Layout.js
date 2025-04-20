@@ -14,7 +14,7 @@ const Layout = () => {
     let Navbar;
     if (
       location.pathname === "/" ||
-      location.pathname === "/ai-quiz" ||
+      location.pathname.startsWith("/quiz-generator") ||
       location.pathname === "/login" ||
       location.pathname === "/signup" ||
       location.pathname === "/profile"

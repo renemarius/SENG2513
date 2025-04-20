@@ -27,6 +27,7 @@ router.get('/api/user/:userID/stats', async (req, res) => {
     }
 });
 
+// Takes user infos
 router.get('/:userID', async (req, res) => {
   try {
       const user = await User.findByPk(req.params.userID);

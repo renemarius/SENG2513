@@ -22,7 +22,7 @@ function TakeQuizPage() {
       // Initialize userAnswers array with empty strings
       setUserAnswers(new Array(location.state.questions.length).fill(''));
     } else {
-      navigate('/ai-quiz');
+      navigate('/quiz-generator/ai');
     }
   }, [location, navigate]);
 
@@ -135,7 +135,7 @@ function TakeQuizPage() {
                 <button className="btn btn-primary me-2" onClick={handleContinueTrying}>
                   Try Again
                 </button>
-                <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+                <button className="btn btn-secondary" onClick={() => navigate('/quiz-generator/ai')}>
                   New Quiz
                 </button>
               </div>
@@ -144,7 +144,7 @@ function TakeQuizPage() {
                 <button className="btn btn-primary me-2" onClick={handleContinueTrying}>
                   Try Again
                 </button>
-                <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+                <button className="btn btn-secondary" onClick={() => navigate('/quiz-generator/ai')}>
                   New Quiz
                 </button>
               </div>
@@ -186,7 +186,7 @@ function TakeQuizPage() {
               <button className="btn btn-primary me-2" onClick={handleRetakeQuiz}>
                 Retake Quiz
               </button>
-              <button className="btn btn-secondary" onClick={() => navigate('/ai-quiz')}>
+              <button className="btn btn-secondary" onClick={() => navigate('/quiz-generator/ai')}>
                 New Quiz
               </button>
             </div>

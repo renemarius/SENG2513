@@ -5,9 +5,10 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
-import AIQuizPage from "./pages/AIQuizPage";
+
 import TakeQuizPage from "./pages/TakeQuizPage";
 import Profile from "./pages/Profile";
+import QuizGenerator from "./pages/QuizGenerator";
 
 function App() {
   /*const isLogin = localStorage.getItem("isLogin") === "true";*/
@@ -18,9 +19,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/ai-quiz" element={<AIQuizPage />} />
           <Route path="/take-quiz" element={<TakeQuizPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/quiz-generator/:type" element={<QuizGenerator />} />
         </Route>
       </Routes>
     </BrowserRouter>
