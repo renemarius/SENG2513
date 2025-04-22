@@ -71,7 +71,7 @@ const Profile = () => {
             <div className="row px-5 g-4">
                 <div className="col-md-6">
                     <div className="stat-card p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
+                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1a1a1a", }} >
                         <h3 className="display-5" style={{ color: "#237ac3", }} >{user.quizzesCompleted}</h3>
                         <p className="mt-2">Quizzes Completed</p>
                     </div>

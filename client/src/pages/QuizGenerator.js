@@ -28,6 +28,7 @@ const QuizGenerator = () => {
       });
     }
   }, [quizData, navigate, topic, difficulty]);
+  
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
     

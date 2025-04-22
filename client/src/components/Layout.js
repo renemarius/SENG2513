@@ -25,6 +25,10 @@ const Layout = () => {
     } else {
         Navbar = null;      // no navabr for some pages
     }
+
+    let footer;
+    if(location.pathname === "/take-quiz") footer = false;
+    else footer = true;
     
     return (
         <div className={`App d-flex flex-column min-vh-100 ${
@@ -36,7 +40,7 @@ const Layout = () => {
                 <Outlet />  {/* Render the active page */}
             </main>
             <div className="flex-grow-1"></div> {/* This ensures content grows and pushes footer down */}
-            <Footer />
+            {footer && <Footer />}
         </div>
     );
 };

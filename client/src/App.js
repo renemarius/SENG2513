@@ -5,8 +5,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
-
-import TakeQuizPage from "./pages/TakeQuizPage";
+import TakeQuiz from "./pages/TakeQuiz";
 import Profile from "./pages/Profile";
 import QuizGenerator from "./pages/QuizGenerator";
 
@@ -19,7 +18,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/take-quiz" element={<TakeQuizPage />} />
+          <Route path="/take-quiz" element={<TakeQuiz />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/quiz-generator/:type" element={<QuizGenerator />} />
         </Route>
