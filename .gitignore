@@ -31,3 +31,5 @@ yarn-error.log*
 ./package.json
 ./package-lock.json
 .env
+./localhost-key.pem
+./localhost.pem
