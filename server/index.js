@@ -10,6 +10,8 @@ import { generateQuiz } from './routes/aiQuiz.js';
 import express from 'express';
 import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js'; 
+import resultRoutes from './routes/savedResult.js';
+import quizRoutes from './routes/quiz.js';
 
 // Configure environment variables first
 dotenv.config();
@@ -36,8 +38,6 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Set up auth routes
-app.use('/api/auth', authRoutes);
 
 // RapidAPI configuration
 const rapidApiOptions = {
@@ -54,9 +54,11 @@ const rapidApiOptions = {
 // Sync database models
 syncModels();
 
-// Profile route
+// Set up auth routes
+app.use('/api/auth', authRoutes);
+app.use('/api/result', resultRoutes);
+app.use('/api/quiz', quizRoutes);
 app.use("/api/user", profileRoutes);
-
 app.post('/api/ai-quiz/generate', generateQuiz);
 
 

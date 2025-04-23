@@ -10,6 +10,7 @@ const TakeQuiz = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState([]);
     const [quizTopic, setQuizTopic] = useState('');
+    const [quizDifficulty, setQuizDifficulty] = useState('');
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState('');
     const [score, setScore] = useState(0);
@@ -22,6 +23,7 @@ const TakeQuiz = () => {
         if (location.state?.questions) {
             setQuizData(location.state.questions);
             setQuizTopic(location.state.topic || 'Quiz');
+            setQuizDifficulty(location.state.difficulty);
             // Initialize userAnswers array with empty strings
             setUserAnswers(new Array(location.state.questions.length).fill(''));
         } else {
@@ -75,7 +77,7 @@ const TakeQuiz = () => {
     if (!quizData.length) return <div className="container mt-5 text-center" >Loading...</div>;
 
     return (
-        <div className="container bg-dark text-white mt-4 p-4 rounded" >
+        <div className="container bg-dark text-white mt-4 mb-4 p-4 rounded" >
             <h1 className="text-center mb-4">{quizTopic} Quiz</h1>
             {!showResults ? (
                 <QuestionCard
@@ -88,11 +90,12 @@ const TakeQuiz = () => {
                 />
             ) : !showExplanations ? (
                 <QuizResult
+                    topic={quizTopic}
                     score={score}
                     total={quizData.length}
                     attempts={totalAttempts}
                     onTryAgain={handleContinueTrying}
-                    onRetake={handleRetakeQuiz}
+                    difficulty={quizDifficulty}
                     onShowExplanations={() => setShowExplanations(true)}
                     navigate={navigate}
                 />

@@ -54,7 +54,7 @@ const HomeNavbar = () => {
                     {isLoggedIn && (
                         <>
                             <li>
-                                <Link to="/profile" className="bordered-link btn btn-link text-white">My Quizzes</Link>
+                                <Link to="/my-quizzes" className="bordered-link btn btn-link text-white">My Quizzes</Link>
                             </li>
                             <li>
                                 <button onClick={handleLogout} className="bordered-link btn btn-link text-white">

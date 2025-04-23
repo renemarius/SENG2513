@@ -1,6 +1,12 @@
 import React from 'react';
 
 const QuizExplanations = ({quizData, userAnswers, onRetake, navigate}) => {
+    //const [hasSaved, setHasSaved] = useState(false);
+
+    /*const savedExplanations = () => {
+        if (hasSaved) return;
+
+    }*/
     return (
         <div className="card text-white border" style={{backgroundColor: "#1a1a1a",}} >
             <div className="card-body">
@@ -34,9 +40,19 @@ const QuizExplanations = ({quizData, userAnswers, onRetake, navigate}) => {
                     <button className="btn btn-primary me-2" onClick={onRetake}>
                     Retake Quiz
                     </button>
-                    <button className="btn btn-secondary" onClick={() => navigate('/quiz-generator/ai')}>
+                    <button className="btn btn-secondary me-2" onClick={() => navigate('/quiz-generator/ai')}>
                     New Quiz
                     </button>
+                    {/*<button 
+                            className="btn btn-success me-2" 
+                            onClick={savedExplanations}
+                            disabled={hasSaved}
+                        >
+                            {hasSaved ? "Saved" : "Save Quiz"}
+                    </button>
+                    <button className="btn me-2 btn-danger" onClick={() => navigate('/')}>
+                        Exit
+                    </button>*/}
                 </div>
             </div>
         </div>

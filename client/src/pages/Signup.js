@@ -27,6 +27,8 @@ const Signup = () => {
                 localStorage.setItem("isLogin", "true");
                 localStorage.setItem("userName", data.userName);
                 localStorage.setItem("userID", String(data.userID));
+                console.log("User ID: ", data.userID);
+
                 navigate("/");
             } else {
                 alert(data.message || "Signup failed");

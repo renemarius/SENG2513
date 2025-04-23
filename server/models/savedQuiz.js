@@ -1,45 +1,45 @@
-// models/question.js
+// models/savedQuiz.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Quiz from './quiz.js'; 
+//import Quiz from './savedResult.js'; 
 
-// Question Table
-const Question = sequelize.define('question', {
+// savedQuiz Table
+const savedQuiz = sequelize.define('savedquiz', {
   questionID: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  quizID: {
+  /*quizID: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: Quiz,
       key: 'quizID',
     },
-  },
+  },*/
   question: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
-  },
-  answer: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  difficulty: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
   options: {
-    type: DataTypes.JSON,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: false,
-  }
+  },
+  correctAnswer: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  userAnswer: {
+    type: DataTypes.STRING,
+  },
+  explanation: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  
 });
 
 
-export default Question;
-export{ Question };
+export default savedQuiz;
+export{ savedQuiz };

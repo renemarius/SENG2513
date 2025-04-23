@@ -17,7 +17,8 @@ const Layout = () => {
       location.pathname.startsWith("/quiz-generator") ||
       location.pathname === "/login" ||
       location.pathname === "/signup" ||
-      location.pathname === "/profile"
+      location.pathname === "/profile" ||
+      location.pathname === "/my-quizzes"
     ) {
         Navbar = HomeNavbar;  // Use the same navbar for login and signup pages
     } else if (location.pathname.startsWith("/quiz")) {

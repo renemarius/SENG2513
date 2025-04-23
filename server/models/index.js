@@ -1,3 +1,4 @@
+// models/index.js
 import sequelize from '../config/database.js';
 import User from './user.js';
 import Quiz from './quiz.js';

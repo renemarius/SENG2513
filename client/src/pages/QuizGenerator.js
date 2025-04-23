@@ -18,16 +18,34 @@ const QuizGenerator = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (quizData) {
-      navigate('/take-quiz', {
-        state: {
-          questions: quizData,
-          topic,
-          difficulty,
-        },
-      });
-    }
+    const saveQuizAndNavigate = async () => {
+      if (quizData && quizData.length > 0) {
+        try {
+          const response = await axios.post('https://localhost:3001/api/quiz/create', {
+            title: topic,
+          });
+  
+          const quizID = response.data.quizID;
+          console.log("Quiz created ID: ", quizID);
+  
+          navigate('/take-quiz', {
+            state: {
+              questions: quizData,
+              topic,
+              difficulty,
+              //quizID,
+            },
+          });
+        } catch (error) {
+          console.error("Failed to save quiz:", error);
+          alert("There was an error saving the quiz. Please try again.");
+        }
+      }
+    };
+  
+    saveQuizAndNavigate();
   }, [quizData, navigate, topic, difficulty]);
+  
   
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
