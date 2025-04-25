@@ -1,7 +1,9 @@
 // modesls/savesResult.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Explanation from './savedExplanation.js';
 import User from './user.js';
+import Quiz from './quiz.js';
 
 // savedResult Table
 const savedResult = sequelize.define('savedresult', {
@@ -16,6 +18,22 @@ const savedResult = sequelize.define('savedresult', {
     references: {
       model: User,
       key: 'userID',
+    },
+  },
+  quizID: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Quiz,
+      key: 'quizID',
+    },
+  },
+  explanationID: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Explanation,
+      key: 'explanationID',
     },
   },
   topic: {

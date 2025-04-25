@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import HomeNavbar from "./HomeNavbar";
 import QuizNavbar from "./QuizNavbar";
 import Footer from "./Footer";
@@ -18,7 +19,9 @@ const Layout = () => {
       location.pathname === "/login" ||
       location.pathname === "/signup" ||
       location.pathname === "/profile" ||
-      location.pathname === "/my-quizzes"
+      location.pathname === "/my-quizzes" ||
+      location.pathname.startsWith("/explanations") ||
+      location.pathname.startsWith("/attempts")
     ) {
         Navbar = HomeNavbar;  // Use the same navbar for login and signup pages
     } else if (location.pathname.startsWith("/quiz")) {
@@ -33,7 +36,7 @@ const Layout = () => {
     
     return (
         <div className={`App d-flex flex-column min-vh-100 ${
-            isLogin ? "bg-secondary" : "bg-black"
+            !isLogin || location.pathname === "/profile" ? "bg-black" : "bg-secondary"
         }`}>
 
             {Navbar && <Navbar />}

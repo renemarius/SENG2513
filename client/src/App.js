@@ -9,6 +9,8 @@ import TakeQuiz from "./pages/TakeQuiz";
 import Profile from "./pages/Profile";
 import QuizGenerator from "./pages/QuizGenerator";
 import MyQuizzes from "./pages/MyQuizzes";
+import ExplanationPage from './pages/ExplanationPage';
+import AttemptPage from './pages/AttemptPage';
 
 function App() {
   /*const isLogin = localStorage.getItem("isLogin") === "true";*/
@@ -23,6 +25,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/my-quizzes" element={<MyQuizzes />} />
           <Route path="/quiz-generator/:type" element={<QuizGenerator />} />
+          <Route path="/attempts/:quizID" element={<AttemptPage />} />
+          <Route path="/explanations/:explanationID" element={<ExplanationPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

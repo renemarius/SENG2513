@@ -12,6 +12,8 @@ import authRoutes from './routes/auth.js';
 import profileRoutes from './routes/profile.js'; 
 import resultRoutes from './routes/savedResult.js';
 import quizRoutes from './routes/quiz.js';
+import explanationRoutes from './routes/savedExplanation.js';
+import deleteRoutes from './routes/deleteResult.js';
 
 // Configure environment variables first
 dotenv.config();
@@ -59,6 +61,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/result', resultRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use("/api/user", profileRoutes);
+app.use("/api/delete", deleteRoutes);
+app.use('/api/explanations', explanationRoutes);
 app.post('/api/ai-quiz/generate', generateQuiz);
 
 

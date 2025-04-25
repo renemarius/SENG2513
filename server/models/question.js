@@ -26,7 +26,7 @@ const Question = sequelize.define('question', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  category: {
+  title: {
     type: DataTypes.STRING,
     allowNull: true,
   },
