@@ -1,11 +1,8 @@
-// pages/GenerateQuiz.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const QuizGenerator = () => {
-  
   const { type } = useParams();
   const quizType = type;
 
@@ -17,6 +14,14 @@ const QuizGenerator = () => {
   const [quizData, setQuizData] = useState(null);
   const navigate = useNavigate();
 
+  const API_BASE = process.env.REACT_APP_API_URL;
+  console.log("🧠 API BASE:", API_BASE);
+  
+  // Debug: Log the quiz type when component loads
+  useEffect(() => {
+    console.log("QuizGenerator loaded with type:", quizType);
+  }, [quizType]);
+
   useEffect(() => {
     const saveQuizAndNavigate = async () => {
       if (quizData && quizData.length > 0) {
@@ -25,7 +30,7 @@ const QuizGenerator = () => {
           const response = await axios.post('https://localhost:3001/api/quiz/create', {
             title: topic,
           });
-  
+
           const quizID = response.data.quizID;
           console.log("Quiz created ID: ", quizID);
 
@@ -53,47 +58,84 @@ const QuizGenerator = () => {
         }
       }
     };
-  
+
     saveQuizAndNavigate();
-  }, [quizData, navigate, topic, difficulty]);
-  
-  
+  }, [quizData, navigate, topic, difficulty, API_BASE]);
+
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
-    
     setIsLoading(true);
     setError(null);
     
+    console.log(`Generating ${quizType} quiz with:`, { topic, numberOfQuestions, difficulty });
+
     try {
       let response;
 
-      // AI quiz generator
       if (quizType === 'ai') {
-        response = await axios.post('https://localhost:3001/api/ai-quiz/generate', {
+        response = await axios.post(`https://localhost:3001/api/ai-quiz/generate`, {
           topic,
           numberOfQuestions,
           difficulty
         });
 
+        console.log("AI quiz response:", response.data);
+        
         if (response.data.success) {
           setQuizData(response.data.questions);
         } else {
           setError('Failed to generate quiz questions.');
         }
-      
-        // Trivia quiz generator
-      } else {
-        response = await axios.post('https://localhost:3001/api/trivia', {
-          topic,
+      } else if (quizType === 'trivia') {
+        //console.log("Making trivia quiz request to:", `${API_BASE}/api/trivia`);
+        response = await axios.post(`https://localhost:3001/api/trivia-quiz/generate`, {
+          category: topic,
           numberOfQuestions,
           difficulty
         });
+
+        console.log("Trivia quiz response:", response.data);
+        
+        if (response.data && response.data.questions) {
+          // Handle HTML entities in the data
+          const decodeHTML = (html) => {
+            if (!html) return '';
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+          };
+          
+          // Normalize the questions to ensure they match the format expected by TakeQuiz
+          const normalizedQuestions = response.data.questions.map(q => ({
+            question: decodeHTML(q.question),
+            correctAnswer: decodeHTML(q.correctAnswer),
+            options: Array.isArray(q.options) 
+              ? q.options.map(decodeHTML) 
+              : [...(q.incorrectAnswers || []).map(decodeHTML), decodeHTML(q.correctAnswer)].sort(() => Math.random() - 0.5)
+          }));
+          
+          console.log("Normalized trivia questions:", normalizedQuestions);
+          setQuizData(normalizedQuestions);
+        } else {
+          setError('Failed to generate trivia questions.');
+        }
+      } else {
+        setError(`Unknown quiz type: ${quizType}`);
       }
-      
-    
     } catch (err) {
-      setError('Error connecting to server. Please try again later.');
       console.error('Error generating quiz:', err);
+      // Show more detailed error information
+      if (err.response) {
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        setError(`Server error: ${err.response.status} - ${err.response.data.error || 'Unknown error'}`);
+      } else if (err.request) {
+        console.error('Error request:', err.request);
+        setError('No response received from server. Please check your connection.');
+      } else {
+        console.error('Error message:', err.message);
+        setError(`Error: ${err.message}`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -193,6 +235,6 @@ const QuizGenerator = () => {
       </div>
     </div>
   );
-}
+};
 
 export default QuizGenerator;

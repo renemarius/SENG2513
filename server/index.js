@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import https from 'https';
 import fs from 'fs';
+import axios from 'axios';
 import { syncModels } from "./models/index.js";
 import { generateQuiz } from './routes/aiQuiz.js';
 import express from 'express';
@@ -14,6 +15,7 @@ import resultRoutes from './routes/savedResult.js';
 import quizRoutes from './routes/quiz.js';
 import explanationRoutes from './routes/savedExplanation.js';
 import deleteRoutes from './routes/deleteResult.js';
+import triviaRoutes from './routes/trivia.js';
 
 // Configure environment variables first
 dotenv.config();
@@ -30,7 +32,7 @@ const app = express();
 
 // Improve CORS configuration
 app.use(cors({
-  origin: 'https://localhost:3000',
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -63,11 +65,11 @@ app.use('/api/quiz', quizRoutes);
 app.use("/api/user", profileRoutes);
 app.use("/api/delete", deleteRoutes);
 app.use('/api/explanations', explanationRoutes);
+app.use('/api/trivia-quiz', triviaRoutes); // Use the trivia routes module
 app.post('/api/ai-quiz/generate', generateQuiz);
 
-
-// Trivia route
-app.get("/api/trivia", (req, res) => {
+// Keep the existing RapidAPI trivia route for backwards compatibility
+app.get("/api/trivia-old", (req, res) => {
   const category = req.query.category || '';
   const difficulty = req.query.difficulty || '';
   const amount = req.query.amount || '10';
