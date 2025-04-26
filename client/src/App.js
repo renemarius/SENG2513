@@ -9,6 +9,7 @@ import TakeQuiz from "./pages/TakeQuiz";
 import Profile from "./pages/Profile";
 import QuizGenerator from "./pages/QuizGenerator";
 import MyQuizzes from "./pages/MyQuizzes";
+import QuizSelection from "./components/QuizSelection"; // Make sure to use your existing component
 
 function App() {
   /*const isLogin = localStorage.getItem("isLogin") === "true";*/
@@ -16,7 +17,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<QuizSelection />} /> {/* Use your enhanced QuizSelection component */}
+          <Route path="/home" element={<Home />} /> {/* Keep Home accessible via /home */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/take-quiz" element={<TakeQuiz />} />
