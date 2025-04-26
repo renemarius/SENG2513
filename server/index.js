@@ -59,7 +59,7 @@ app.use("/api/user", profileRoutes);
 
 app.post('/api/ai-quiz/generate', generateQuiz);
 
-
+console.log("I am here");
 // Trivia route
 app.get("/api/trivia", (req, res) => {
   const category = req.query.category || '';
@@ -96,7 +96,7 @@ app.get("/api/trivia", (req, res) => {
 
   request.end();
 });
-
+console.log("I am here");
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
@@ -112,7 +112,7 @@ if (process.env.NODE_ENV === 'production') {
   });
   
   app.get('/', (req, res) => {
-    res.send('API server is running. Frontend is available at http://localhost:3000');
+    res.send('API server is running. Frontend is available at https://localhost:3000');
   });
 }
 
