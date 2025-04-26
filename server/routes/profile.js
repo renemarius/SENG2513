@@ -1,5 +1,5 @@
 import Attempts from '../models/attempts.js';
-import Result from '../models/result.js';
+import Result from '../models/savedResult.js';
 import User from "../models/user.js";
 import express from "express";
 

@@ -1,13 +1,13 @@
-// models/attempts.js
+// modesls/savesResult.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 import Explanation from './savedExplanation.js';
-import Quiz from './quiz.js';
 import User from './user.js';
+import Quiz from './quiz.js';
 
-// Attempts Table
-const Attempts = sequelize.define('attempts', {
-  attemptID: {
+// savedResult Table
+const savedResult = sequelize.define('savedresult', {
+  rsltID: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -16,16 +16,16 @@ const Attempts = sequelize.define('attempts', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-        model: User,
-        key: 'userID',
+      model: User,
+      key: 'userID',
     },
   },
   quizID: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-        model: Quiz,
-        key: 'quizID',
+      model: Quiz,
+      key: 'quizID',
     },
   },
   explanationID: {
@@ -36,11 +36,20 @@ const Attempts = sequelize.define('attempts', {
       key: 'explanationID',
     },
   },
-  score: {
-    type: DataTypes.INTEGER,
+  topic: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
+  difficulty: {
+    type: DataTypes.TEXT,
+  },
+  score: {
+    type: DataTypes.INTEGER,
+  },
   totalQuestions: {
+    type: DataTypes.INTEGER,
+  },
+  attempts: {
     type: DataTypes.INTEGER,
   },
   createdAt: {
@@ -49,5 +58,5 @@ const Attempts = sequelize.define('attempts', {
 });
 
 
-export default Attempts;
-export{ Attempts };
+export default savedResult;
+export{ savedResult };

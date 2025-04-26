@@ -1,3 +1,4 @@
+// models/question.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 import Quiz from './quiz.js'; 
@@ -17,26 +18,17 @@ const Question = sequelize.define('question', {
       key: 'quizID',
     },
   },
-  question: {
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  answer: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  difficulty: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  options: {
+  questions: {
     type: DataTypes.JSON,
     allowNull: false,
-  }
+  },
+  difficulty: {
+    type: DataTypes.TEXT,
+  },
 });
 
 

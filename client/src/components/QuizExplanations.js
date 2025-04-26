@@ -1,13 +1,15 @@
+// src/QuizExplanations.js
 import React from 'react';
 
-const QuizExplanations = ({quizData, userAnswers, onRetake, navigate}) => {
+const QuizExplanations = ({quizData, userAnswers, onRetake, navigate, readOnly}) => {
+
     return (
-        <div className="card text-white border" style={{backgroundColor: "#1a1a1a",}} >
+        <div className="card text-white bg-dark border" >
             <div className="card-body">
                 <h2 className="text-center mb-4">Explanations</h2>
                 
                 {quizData.map((question, index) => (
-                    <div key={index} className="mb-4 p-3 border rounded">
+                    <div key={index} className="mb-4 p-3 border rounded" style={{backgroundColor: "#1a1a1a"}} >
                         <h4>{index + 1}. {question.question}</h4>
                         <div className="options mt-2">
                             {question.options.map((option, optIndex) => (
@@ -29,15 +31,16 @@ const QuizExplanations = ({quizData, userAnswers, onRetake, navigate}) => {
                         </div>
                     </div>
                 ))}
-                
-                <div className="text-center mt-4">
-                    <button className="btn btn-primary me-2" onClick={onRetake}>
-                    Retake Quiz
-                    </button>
-                    <button className="btn btn-secondary" onClick={() => navigate('/quiz-generator/ai')}>
-                    New Quiz
-                    </button>
-                </div>
+                {!readOnly && (
+                    <div className="text-center mt-4">
+                        <button className="btn btn-primary me-2" onClick={onRetake}>
+                        Retake Quiz
+                        </button>
+                        <button className="btn btn-secondary me-2" onClick={() => navigate('/quiz-generator/ai')}>
+                        New Quiz
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

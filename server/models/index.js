@@ -1,3 +1,4 @@
+// models/index.js
 import sequelize from '../config/database.js';
 import User from './user.js';
 import Quiz from './quiz.js';
@@ -58,33 +59,46 @@ const syncModels = async () => {
     });
 
     // Questions!!
-  await Question.bulkCreate([
-    {
-      quizID: quizMap['General Knowledge'],
-      question: 'What is the capital of France?',
-      answer: 'Paris',
-      options: ["Paris", "London", "Berlin", "Madrid"]
-    },
-    {
-      quizID: quizMap['General Knowledge'],
-      question: 'How many continents are there?',
-      answer: '7',
-      options: ["3", "5", "7", "The USA"]
-    },
-    {
-      quizID: quizMap['Science Quiz'],
-      question: 'What planet is known as the Red Planet?',
-      answer: 'Mars',
-      options: ["Pluto", "Mars", "Jupiter", "Saturn"]
-    },
-    {
-      quizID: quizMap['Science Quiz'],
-      question: 'What gas do plants absorb from the atmosphere?',
-      answer: 'Carbon Dioxide',
-      options: ["Hydrogen", "Carbon Dioxide", "Helium", "Oxygen"]
-    }
-  ]);
-  console.log('Questions inserted successfully.');
+    await Question.bulkCreate([
+      {
+        quizID: quizMap['General Knowledge'],
+        title: 'Capital City Question',
+        questions: {
+          question: 'What is the capital of France?',
+          answer: 'Paris',
+          options: ["Paris", "London", "Berlin", "Madrid"]
+        }
+      },
+      {
+        quizID: quizMap['General Knowledge'],
+        title: 'Continent Question',
+        questions: {
+          question: 'How many continents are there?',
+          answer: '7',
+          options: ["3", "5", "7", "The USA"]
+        }
+      },
+      {
+        quizID: quizMap['Science Quiz'],
+        title: 'Planet Question',
+        questions: {
+          question: 'What planet is known as the Red Planet?',
+          answer: 'Mars',
+          options: ["Pluto", "Mars", "Jupiter", "Saturn"]
+        }
+      },
+      {
+        quizID: quizMap['Science Quiz'],
+        title: 'Plant Gas Question',
+        questions: {
+          question: 'What gas do plants absorb from the atmosphere?',
+          answer: 'Carbon Dioxide',
+          options: ["Hydrogen", "Carbon Dioxide", "Helium", "Oxygen"]
+        }
+      }
+    ]);
+    
+    console.log('Questions inserted successfully.');    
 
   };
   

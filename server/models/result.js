@@ -1,3 +1,4 @@
+// models/result.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 import Question from './question.js';

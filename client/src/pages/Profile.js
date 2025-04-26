@@ -27,67 +27,160 @@ const Profile = () => {
         };
     
         const fetchStats = async () => {
-            const res = await fetch(`https://localhost:3001/api/user/${userID}/stats`);
-            const stats = await res.json();
-            setUser(prev => ({ ...prev, ...stats }));
-        };
+            try {
+                const res = await fetch(`https://localhost:3001/api/result/attempts/${userID}`);
+                const attempts = await res.json();
+        
+                const quizzesCompleted = attempts.length;
+        
+                let totalScore = 0;
+                let totalPossible = 0;
+                let totalQuestionsAnswered = 0;
+        
+                attempts.forEach(attempt => {
+                    totalScore += attempt.score;
+                    totalPossible += attempt.totalQuestions;
+                    totalQuestionsAnswered += attempt.totalQuestions;
+                });
+
+                console.log("Total Score: ", totalScore);
+        
+                const averageScore = totalPossible > 0
+                    ? `${Math.round((totalScore / totalPossible) * 100)}%`
+                    : "0%";
+        
+                setUser(prev => ({
+                    ...prev,
+                    quizzesCompleted,
+                    averageScore,
+                    questionsAnswered: totalQuestionsAnswered,
+                }));
+            } catch (err) {
+                console.error("Failed to fetch stats:", err);
+            }
+        };        
     
         fetchUserInfo();
         fetchStats();
     }, []);
 
     return (
-        <div className="text-white min-h-screen px-8 py-6">
-            <div className="d-flex align-items-center gap-4 mb-5 " style={{ padding: "50px 50px" }} >
-                <div className="position-relative d-inline-block">
-                    <div
-                        className="position-absolute top-0 start-0 w-100 h-100 rounded-circle"
-                        style={{
-                        backgroundColor: "#237ac3",
-                        filter: "blur(10px)",
-                        zIndex: 0,
-                        }}
-                    />
-                    <img
-                        src={icon}
-                        alt="profile"
-                        className="rounded-circle position-relative"
-                        style={{
-                        width: "160px",
-                        height: "160px",
-                        objectFit: "cover",
-                        border: "4px solid #237ac3",
-                        zIndex: 1,
-                        }}
-                    />
+        <div className="d-flex flex-column vh-80">
+            {/* Main content */}
+            <div className="flex-grow-1 text-white">
+                <div className="container pt-5 pb-3">
+                    <div className="d-flex flex-column flex-md-row align-items-center gap-4 mb-5">
+                        <div className="position-relative">
+                            {/* Modern glow effect */}
+                            <div
+                                className="position-absolute"
+                                style={{
+                                    top: "-10px",
+                                    left: "-10px",
+                                    width: "calc(100% + 20px)",
+                                    height: "calc(100% + 20px)",
+                                    backgroundColor: "#237ac3",
+                                    filter: "blur(20px)",
+                                    opacity: "0.5",
+                                    zIndex: 0,
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <img
+                            src={icon}
+                            alt="profile"
+                            className="rounded-circle position-relative"
+                            style={{
+                                width: "140px",
+                                height: "140px",
+                                objectFit: "cover",
+                                border: "3px solid rgba(35, 122, 195, 0.8)",
+                                zIndex: 1,
+                                boxShadow: "0 8px 32px rgba(35, 122, 195, 0.3)",
+                            }}
+                            />
+                        </div>
+            
+                        <div className="text-center text-md-start" style={{ color: "#e0e0e0" }}>
+                            <h2 className="fw-bold mb-2">{user.name}</h2>
+                            <p className="mb-1 opacity-75">{user.email}</p>
+                            <p className="mb-2 opacity-75">Joined {user.joined}</p>
+                        </div>
                     </div>
-
-                <div style={{ fontSize: "1.25rem", color: "#cfe9ff", }}>
-                    <h2 className="fw-bold fs-3 mb-1">{user.name}</h2>
-                    <p className="mb-1">{user.email}</p>
-                    <p className="mb-1">Joined {user.joined}</p>
-                </div>
-            </div>
-            <div className="row px-5 g-4">
-                <div className="col-md-6">
-                    <div className="stat-card p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1a1a1a", }} >
-                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.quizzesCompleted}</h3>
-                        <p className="mt-2">Quizzes Completed</p>
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <div className="stat-card p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
-                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.averageScore}</h3>
-                        <p className="mt-2">Average Score</p>
-                    </div>
-                </div>
-                <div className="col-12">
-                    <div className="stat-card p-4 text-center rounded" 
-                            style={{ borderStyle: "solid", borderColor: "#237ac3", backgroundColor: "#1f1f1f", }} >
-                        <h3 className="display-5" style={{ color: "#237ac3", }} >{user.questionsAnswered}</h3>
-                        <p className="mt-2">Questions Answered</p>
+            
+                    {/* Stats cards with modern design */}
+                    <div className="row g-4 mt-3">
+                        <div className="col-md-6">
+                            <div 
+                            className="p-4 rounded-4 h-100 text-center transition-all" 
+                            style={{ 
+                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
+                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
+                                border: "1px solid rgba(35, 122, 195, 0.2)",
+                                transform: "translateY(0)",
+                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = "translateY(-5px)";
+                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
+                            }}
+                            >
+                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.quizzesCompleted}</h3>
+                            <p className="mt-2 text-white-50">Quizzes Completed</p>
+                            </div>
+                        </div>
+                    
+                        <div className="col-md-6">
+                            <div 
+                            className="p-4 rounded-4 h-100 text-center transition-all" 
+                            style={{ 
+                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
+                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
+                                border: "1px solid rgba(35, 122, 195, 0.2)",
+                                transform: "translateY(0)",
+                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = "translateY(-5px)";
+                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
+                            }}
+                            >
+                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.averageScore}</h3>
+                            <p className="mt-2 text-white-50">Average Score</p>
+                            </div>
+                        </div>
+                    
+                        <div className="col-12">
+                            <div 
+                            className="p-4 rounded-4 text-center transition-all" 
+                            style={{ 
+                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
+                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
+                                border: "1px solid rgba(35, 122, 195, 0.2)",
+                                transform: "translateY(0)",
+                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = "translateY(-5px)";
+                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
+                            }}
+                            >
+                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.questionsAnswered}</h3>
+                            <p className="mt-2 text-white-50">Questions Answered</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

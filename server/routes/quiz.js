@@ -1,41 +1,66 @@
 import express from 'express';
-import Attempts from '../models/attempts.js';
-import Result from '../models/result.js';
+import Quiz from '../models/quiz.js';
 import Question from '../models/question.js';
 
 const router = express.Router();
-// Purpose: IF WE COMPLETE OUR GOAL, then this route here to retrieve quizzes users previously took.
-router.post('/api/quiz/submit', async (req, res) => {
-    const{userID, quizID, answers} = req.body;
-    try{
-        let score = 0;
-        const resultEntries = [];
-    
-        for(const answer of answers){
-          const question = await Question.findByPk(answer.questionID);
-          const isCorrect = question.answer === answer.selectedAnswer;
-    
-          if(isCorrect) 
-            score++;
-    
-          resultEntries.push({
-            userID,
-            questionID: answer.questionID,
-            isCorrect
-          });
-        }
-        const attempt = await Attempts.create({
-            userID,
-            quizID,
-            score
-          });
-          await Result.bulkCreate(resultEntries);
 
-    res.json({message: 'Submission successful', score});
-  }catch(error){ // debugging stuff
-    console.error('Error submitting quiz:', error);
-    res.status(500).json({error: 'Failed to submit quiz'});
+// Save quiz
+router.post('/create', async (req, res) => {
+  
+    try{
+      const{ title } = req.body;
+
+      if (!title) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      const saved = await Quiz.create({
+        title,
+      });
+
+      return res.status(200).json({ message: "Quiz saved", quizID: saved.quizID });
+  } catch (error) {
+    console.error("🔥 Error saving quiz:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Save questions
+router.post('/save-questions', async (req, res) => {
+  try {
+    const { quizID, title, questions, difficulty } = req.body;
+    
+    // Save all questions in bulk
+    const savedQuestion = await Question.create({
+      quizID,
+      title,
+      questions,
+      difficulty,
+    });
+    
+    return res.status(200).json({ 
+      message: "Questions saved successfully", 
+      questionID: savedQuestion.questionID 
+    });
+  } catch (error) {
+    console.error("Error saving questions:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Fetch questions
+router.get('/questions/:quizID', async (req, res) => {
+  try {
+    const { quizID } = req.params;
+    const questions = await Question.findOne({
+      where: { quizID }
+    });
+    return res.json(questions);
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 
 export default router;

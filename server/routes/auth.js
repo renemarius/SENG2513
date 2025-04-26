@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
             password: hashedPassword,
         });
        
-        res.status(201).json({ message: 'Signup successful', userName: newUser.username });
+        res.status(201).json({ message: 'Signup successful', userName: newUser.username, userID: newUser.userID });
     } catch (error) {
         console.error('Signup error', error);
         res.status(500).json({ message: 'Internal server error' });

@@ -10,6 +10,8 @@ const TakeQuiz = () => {
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState([]);
     const [quizTopic, setQuizTopic] = useState('');
+    const [quizDifficulty, setQuizDifficulty] = useState('');
+    const [quizID, setQuizID] = useState('');
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState('');
     const [score, setScore] = useState(0);
@@ -22,8 +24,11 @@ const TakeQuiz = () => {
         if (location.state?.questions) {
             setQuizData(location.state.questions);
             setQuizTopic(location.state.topic || 'Quiz');
+            setQuizDifficulty(location.state.difficulty);
+            setQuizID(location.state.quizID);
             // Initialize userAnswers array with empty strings
             setUserAnswers(new Array(location.state.questions.length).fill(''));
+            
         } else {
             navigate('/quiz-generator/ai');
         }
@@ -75,7 +80,7 @@ const TakeQuiz = () => {
     if (!quizData.length) return <div className="container mt-5 text-center" >Loading...</div>;
 
     return (
-        <div className="container bg-dark text-white mt-4 p-4 rounded" >
+        <div className="container text-white mt-4 mb-4 p-4 rounded" style={{backgroundColor: "#1a1a1a"}}>
             <h1 className="text-center mb-4">{quizTopic} Quiz</h1>
             {!showResults ? (
                 <QuestionCard
@@ -88,13 +93,17 @@ const TakeQuiz = () => {
                 />
             ) : !showExplanations ? (
                 <QuizResult
+                    topic={quizTopic}
                     score={score}
+                    quizID={quizID}
                     total={quizData.length}
                     attempts={totalAttempts}
                     onTryAgain={handleContinueTrying}
-                    onRetake={handleRetakeQuiz}
+                    difficulty={quizDifficulty}
                     onShowExplanations={() => setShowExplanations(true)}
                     navigate={navigate}
+                    quizData={quizData}
+                    userAnswers={userAnswers}
                 />
             ) : (
                 <QuizExplanations
@@ -102,6 +111,7 @@ const TakeQuiz = () => {
                     userAnswers={userAnswers}
                     onRetake={handleRetakeQuiz}
                     navigate={navigate}
+                    readOnly={false}
                 />
             )}
         </div>
