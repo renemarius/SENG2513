@@ -75,11 +75,26 @@ router.get('/quiz/:userID', async (req, res) => {
     }
 });
 
+// Get Attempts by userID and quizID
 router.get('/attempts/:userID/:quizID', async (req, res) => {
   try {
-    const { userID, quizID } = req.params; // Changed from req.body to req.params
+    const { userID, quizID } = req.params; 
     const attempts = await Attempts.findAll({
       where: { userID, quizID },
+    });
+    res.json(attempts);
+  } catch (err) {
+    console.error("Error fetching attempts:", err);
+    res.status(500).json({ error: 'Failed to fetch attempts' });
+  }
+});
+
+// Get all attempts of a user
+router.get('/attempts/:userID/', async (req, res) => {
+  try {
+    const { userID } = req.params; 
+    const attempts = await Attempts.findAll({
+      where: { userID },
     });
     res.json(attempts);
   } catch (err) {

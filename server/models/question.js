@@ -18,26 +18,17 @@ const Question = sequelize.define('question', {
       key: 'quizID',
     },
   },
-  question: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  answer: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   title: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
-  difficulty: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  options: {
+  questions: {
     type: DataTypes.JSON,
     allowNull: false,
-  }
+  },
+  difficulty: {
+    type: DataTypes.TEXT,
+  },
 });
 
 

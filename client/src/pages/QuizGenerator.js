@@ -30,16 +30,14 @@ const QuizGenerator = () => {
           console.log("Quiz created ID: ", quizID);
 
           // Save all questions
-          await axios.post('https://localhost:3001/api/quiz/save-questions', {
-            quizID: quizID,
+          const savedQuestions = await axios.post('https://localhost:3001/api/quiz/save-questions', {
+            quizID,
             title: topic,
-            questions: quizData.map(q => ({
-              question: q.question,
-              answer: q.correctAnswer,
-              options: q.options,
-              difficulty: difficulty
-            }))
+            questions: quizData,
+            difficulty
           });
+          const questionID = savedQuestions.data.questionID;
+          console.log("Question ID: ", questionID);
   
           navigate('/take-quiz', {
             state: {

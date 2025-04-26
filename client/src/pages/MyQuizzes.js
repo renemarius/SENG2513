@@ -20,6 +20,10 @@ const MyQuizzes = () => {
         navigate(`/attempts/${quizID}`);
     }
 
+    const onRetakeQuiz = (quizID) => {
+        navigate(`/retake-quiz/${quizID}`);
+    }
+
     const handleDelete = async (explanationID, quizID) => {
         if (!window.confirm("Are you sure you want to delete this attempt?")) return;
         console.log("Explanation ID: ", explanationID);
@@ -124,6 +128,9 @@ const MyQuizzes = () => {
                                                     </Dropdown.Item>
                                                     <Dropdown.Item onClick={() => onViewAttempts(quiz.quizID)}>
                                                         <i className="bi bi-clock-history me-2"></i> View Attempts
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => onRetakeQuiz(quiz.quizID)}>
+                                                        <i className="bi bi-arrow-repeat me-2"></i> Retake Quiz
                                                     </Dropdown.Item>
                                                     <Dropdown.Divider />
                                                     <Dropdown.Item 

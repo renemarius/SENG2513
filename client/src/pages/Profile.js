@@ -27,10 +27,38 @@ const Profile = () => {
         };
     
         const fetchStats = async () => {
-            const res = await fetch(`https://localhost:3001/api/user/${userID}/stats`);
-            const stats = await res.json();
-            setUser(prev => ({ ...prev, ...stats }));
-        };
+            try {
+                const res = await fetch(`https://localhost:3001/api/result/attempts/${userID}`);
+                const attempts = await res.json();
+        
+                const quizzesCompleted = attempts.length;
+        
+                let totalScore = 0;
+                let totalPossible = 0;
+                let totalQuestionsAnswered = 0;
+        
+                attempts.forEach(attempt => {
+                    totalScore += attempt.score;
+                    totalPossible += attempt.totalQuestions;
+                    totalQuestionsAnswered += attempt.totalQuestions;
+                });
+
+                console.log("Total Score: ", totalScore);
+        
+                const averageScore = totalPossible > 0
+                    ? `${Math.round((totalScore / totalPossible) * 100)}%`
+                    : "0%";
+        
+                setUser(prev => ({
+                    ...prev,
+                    quizzesCompleted,
+                    averageScore,
+                    questionsAnswered: totalQuestionsAnswered,
+                }));
+            } catch (err) {
+                console.error("Failed to fetch stats:", err);
+            }
+        };        
     
         fetchUserInfo();
         fetchStats();

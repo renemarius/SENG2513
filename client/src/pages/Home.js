@@ -26,7 +26,7 @@ const Home = () => {
                     </Link>
 
                     <Link
-                        to="/quiz-generator"
+                        to="/quiz-generator/trivia"
                         state={{ type: 'trivia' }}
                         style={{ textDecoration: 'none' }}
                         >

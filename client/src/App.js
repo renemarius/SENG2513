@@ -11,6 +11,7 @@ import QuizGenerator from "./pages/QuizGenerator";
 import MyQuizzes from "./pages/MyQuizzes";
 import ExplanationPage from './pages/ExplanationPage';
 import AttemptPage from './pages/AttemptPage';
+import RetakeQuiz from './components/RetakeQuiz'
 
 function App() {
   /*const isLogin = localStorage.getItem("isLogin") === "true";*/
@@ -26,6 +27,7 @@ function App() {
           <Route path="/my-quizzes" element={<MyQuizzes />} />
           <Route path="/quiz-generator/:type" element={<QuizGenerator />} />
           <Route path="/attempts/:quizID" element={<AttemptPage />} />
+          <Route path="/retake-quiz/:quizID" element={<RetakeQuiz />} />
           <Route path="/explanations/:explanationID" element={<ExplanationPage />} />
         </Route>
       </Routes>
