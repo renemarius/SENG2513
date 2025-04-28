@@ -15,9 +15,10 @@ const ExplanationPage = () => {
     const userID = localStorage.getItem("userID");
 
     useEffect(() => {
+        console.log("INSIDE Explanation Page");
         const fetchExplanationData = async () => {
         try {
-            const res = await axios.get(`/api/explanations/${userID}/${explanationID}`);
+            const res = await axios.get(`https://localhost:3001/api/explanations/${userID}/${explanationID}`);
             setQuizData(res.data.questions.quizData);
             setUserAnswers(res.data.questions.userAnswers);
             setTopic(res.data.title);

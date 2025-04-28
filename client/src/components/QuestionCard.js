@@ -2,7 +2,7 @@ import React from 'react';
 
 const QuestionCard = ({ question, current, total, selectedAnswer, onSelect, onNext }) => {
   return (
-    <div className="card bg-dark text-white border" >
+    <div className="card bg-dark text-white" style={{ border: '1px solid #237ac3' }}>
       <div className="card-body">
         <h5 className="card-title">Question {current + 1} of {total}</h5>
         <h3 className="mb-4">{question.question}</h3>

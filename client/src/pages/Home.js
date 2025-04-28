@@ -9,20 +9,20 @@ const Home = () => {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '2rem',
+    paddingTop: '6rem',
   };
   
   const headingStyle = {
     fontSize: '3rem',
     marginBottom: '10px',
-    color: '#ffffff',
+    color: '#e0ffff',
     textAlign: 'center',
   };
   
   const paragraphStyle = {
     fontSize: '1rem',
     marginBottom: '20px',
-    color: '#ffffff',
+    color: '#f0f0f0',
     textAlign: 'center',
   };
   const cardsContainerStyle = {

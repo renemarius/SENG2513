@@ -65,125 +65,78 @@ const Profile = () => {
     }, []);
 
     return (
-        <div className="d-flex flex-column vh-80">
-            {/* Main content */}
-            <div className="flex-grow-1 text-white">
-                <div className="container pt-5 pb-3">
-                    <div className="d-flex flex-column flex-md-row align-items-center gap-4 mb-5">
-                        <div className="position-relative">
-                            {/* Modern glow effect */}
-                            <div
-                                className="position-absolute"
-                                style={{
-                                    top: "-10px",
-                                    left: "-10px",
-                                    width: "calc(100% + 20px)",
-                                    height: "calc(100% + 20px)",
-                                    backgroundColor: "#237ac3",
-                                    filter: "blur(20px)",
-                                    opacity: "0.5",
-                                    zIndex: 0,
-                                    borderRadius: "50%",
-                                }}
-                            />
-                            <img
-                            src={icon}
-                            alt="profile"
-                            className="rounded-circle position-relative"
-                            style={{
-                                width: "140px",
-                                height: "140px",
-                                objectFit: "cover",
-                                border: "3px solid rgba(35, 122, 195, 0.8)",
-                                zIndex: 1,
-                                boxShadow: "0 8px 32px rgba(35, 122, 195, 0.3)",
-                            }}
-                            />
-                        </div>
-            
-                        <div className="text-center text-md-start" style={{ color: "#e0e0e0" }}>
-                            <h2 className="fw-bold mb-2">{user.name}</h2>
-                            <p className="mb-1 opacity-75">{user.email}</p>
-                            <p className="mb-2 opacity-75">Joined {user.joined}</p>
-                        </div>
-                    </div>
-            
-                    {/* Stats cards with modern design */}
-                    <div className="row g-4 mt-3">
-                        <div className="col-md-6">
-                            <div 
-                            className="p-4 rounded-4 h-100 text-center transition-all" 
-                            style={{ 
-                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
-                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
-                                border: "1px solid rgba(35, 122, 195, 0.2)",
-                                transform: "translateY(0)",
-                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = "translateY(-5px)";
-                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
-                            }}
-                            >
-                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.quizzesCompleted}</h3>
-                            <p className="mt-2 text-white-50">Quizzes Completed</p>
-                            </div>
-                        </div>
-                    
-                        <div className="col-md-6">
-                            <div 
-                            className="p-4 rounded-4 h-100 text-center transition-all" 
-                            style={{ 
-                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
-                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
-                                border: "1px solid rgba(35, 122, 195, 0.2)",
-                                transform: "translateY(0)",
-                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = "translateY(-5px)";
-                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
-                            }}
-                            >
-                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.averageScore}</h3>
-                            <p className="mt-2 text-white-50">Average Score</p>
-                            </div>
-                        </div>
-                    
-                        <div className="col-12">
-                            <div 
-                            className="p-4 rounded-4 text-center transition-all" 
-                            style={{ 
-                                background: "linear-gradient(145deg, #1a1a1a, #242424)",
-                                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2)",
-                                border: "1px solid rgba(35, 122, 195, 0.2)",
-                                transform: "translateY(0)",
-                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = "translateY(-5px)";
-                                e.currentTarget.style.boxShadow = "0 8px 32px rgba(35, 122, 195, 0.3)";
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = "translateY(0)";
-                                e.currentTarget.style.boxShadow = "0 4px 24px rgba(0, 0, 0, 0.2)";
-                            }}
-                            >
-                            <h3 className="display-4 fw-bold mb-0" style={{ color: "#3d9eff" }}>{user.questionsAnswered}</h3>
-                            <p className="mt-2 text-white-50">Questions Answered</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div className="position-relative" style={{ height: "88vh" }}>
+      
+          {/* Background split */}
+          <div className="d-flex flex-column h-100">
+            {/* Black top background */}
+            <div className="bg-black" style={{ flex: '0 0 30%' }}></div>
+
+            {/* Gray bottom background */}
+            <div className="bg-secondary" style={{ flex: '0 0 70%' }}></div>
+          </div>
+      
+          {/* Card positioned on top */}
+          <div
+            className="bg-white rounded-4 shadow-lg p-4 d-flex flex-column align-items-center"
+            style={{
+                width: '100%',
+                maxWidth: '700px',
+                position: 'absolute',
+                top: '30%',
+                left: '50%',
+                transform: 'translate(-50%, -25%)',
+                textAlign: 'center'
+            }}
+          >
+            {/* Profile Picture */}
+            <div style={{ position: 'absolute', top: '-60px', left: '50%', transform: 'translateX(-50%)' }}>
+              <img 
+                src={icon} 
+                alt="Profile" 
+                className="rounded-circle" 
+                style={{ width: '120px', height: '120px', objectFit: 'cover', border: '5px solid white', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}
+              />
             </div>
+      
+            {/* Top Buttons */}
+            <div className="d-flex justify-content-between mt-5 px-3 w-100">
+              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }}>
+                <i className="bi bi-collection" style={{ marginRight: '4px' }}></i> Quizzes
+              </div>
+              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }}>
+                <i className="bi bi-award" style={{ marginRight: '4px' }}></i> Attempts
+              </div>
+            </div>
+      
+            {/* User Info */}
+            <div className="mt-3">
+              <h3 className="fw-bold text-dark mb-1">{user.name}</h3>
+              <p className="text-secondary mb-1">{user.email}</p>
+              <p className="text-muted" style={{ fontSize: '14px' }}>Joined {user.joined}</p>
+            </div>
+      
+            {/* Stats */}
+            <div className="d-flex justify-content-around my-4 w-100">
+              <div>
+                <h4 className="fw-bold text-primary mb-0">{user.quizzesCompleted}</h4>
+                <small className="text-dark">Quizzes</small>
+              </div>
+              <div>
+                <h4 className="fw-bold text-primary mb-0">{user.averageScore}</h4>
+                <small className="text-dark">Avg Score</small>
+              </div>
+              <div>
+                <h4 className="fw-bold text-primary mb-0">{user.questionsAnswered}</h4>
+                <small className="text-dark">Questions</small>
+              </div>
+            </div>
+      
+            {/* Show More Button */}
+            <button className="btn btn-primary rounded-pill px-4">Take New Quiz</button>
+      
+          </div>
+      
         </div>
     );
 };

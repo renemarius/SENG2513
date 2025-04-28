@@ -13,9 +13,8 @@ const QuizGenerator = () => {
   const [error, setError] = useState(null);
   const [quizData, setQuizData] = useState(null);
   const navigate = useNavigate();
-
-  const API_BASE = process.env.REACT_APP_API_URL;
-  console.log("🧠 API BASE:", API_BASE);
+  const [categories, setCategories] = useState([]);
+  //const [selectedCategory, setSelectedCategory] = useState("");
   
   // Debug: Log the quiz type when component loads
   useEffect(() => {
@@ -50,6 +49,7 @@ const QuizGenerator = () => {
               topic,
               difficulty,
               quizID,
+              type,
             },
           });
         } catch (error) {
@@ -60,7 +60,22 @@ const QuizGenerator = () => {
     };
 
     saveQuizAndNavigate();
-  }, [quizData, navigate, topic, difficulty, API_BASE]);
+  }, [quizData, navigate, topic, difficulty, type]);
+
+  useEffect(() => {
+    // Fetch the categories from Open Trivia DB API
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("https://opentdb.com/api_category.php");
+        setCategories(response.data.trivia_categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError("Failed to load categories.");
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
@@ -97,25 +112,8 @@ const QuizGenerator = () => {
         console.log("Trivia quiz response:", response.data);
         
         if (response.data && response.data.questions) {
-          // Handle HTML entities in the data
-          const decodeHTML = (html) => {
-            if (!html) return '';
-            const txt = document.createElement('textarea');
-            txt.innerHTML = html;
-            return txt.value;
-          };
-          
-          // Normalize the questions to ensure they match the format expected by TakeQuiz
-          const normalizedQuestions = response.data.questions.map(q => ({
-            question: decodeHTML(q.question),
-            correctAnswer: decodeHTML(q.correctAnswer),
-            options: Array.isArray(q.options) 
-              ? q.options.map(decodeHTML) 
-              : [...(q.incorrectAnswers || []).map(decodeHTML), decodeHTML(q.correctAnswer)].sort(() => Math.random() - 0.5)
-          }));
-          
-          console.log("Normalized trivia questions:", normalizedQuestions);
-          setQuizData(normalizedQuestions);
+          setQuizData(response.data.questions);
+          console.log("Trivia questions:", response.data.questions);
         } else {
           setError('Failed to generate trivia questions.');
         }
@@ -173,21 +171,43 @@ const QuizGenerator = () => {
             <div className="form-container bg-dark">
               <form onSubmit={handleGenerateQuiz} className="p-3 rounded-lg m-4 shadow-md" >
                 <div className="form-group">
-                  <label htmlFor="topic">What do you want to get tested on?</label>
-                  <input
-                    type="text"
-                    id="topic"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                    placeholder="e.g., Artificial Intelligence"
-                    required
-                    className="form-control bg-black text-white border-bottom-0 border-white"
-                    style={{
-                      boxShadow: 'none',
-                      WebkitBoxShadow: '0 0 0 1000px black inset',
-                      WebkitTextFillColor: 'white',
-                    }}
-                  />
+                  {type === 'ai' && 
+                    <>
+                      <label htmlFor="topic">What do you want to get tested on?</label>
+                        <input
+                          type="text"
+                          id="topic"
+                          value={topic}
+                          onChange={(e) => setTopic(e.target.value)}
+                          placeholder="e.g., Artificial Intelligence"
+                          required
+                          className="form-control bg-black text-white border-bottom-0 border-white"
+                          style={{
+                            boxShadow: 'none',
+                            WebkitBoxShadow: '0 0 0 1000px black inset',
+                            WebkitTextFillColor: 'white',
+                          }}
+                        />
+                    </>
+                  }
+                  {type === 'trivia' && 
+                    <>
+                      <label htmlFor="category">Select a Trivia Category:</label>
+                        <select
+                          id="category"
+                          value={topic}
+                          onChange={(e) => setTopic(e.target.value)}
+                          className="form-control bg-black text-white border-bottom-0"
+                        >
+                          <option value="">Select a category</option>
+                          {categories.map((category) => (
+                            <option key={category.name} value={category.name}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                    </>
+                  }
                 </div>
                 
                 <div className="form-group">

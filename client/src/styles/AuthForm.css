@@ -8,7 +8,7 @@
     border-radius: 10px; /* Rounded corners */
     width: 90%; /* Full width by default */
     max-width: 400px; /* Adjust this to make the form smaller or larger */
-    background-color: #1a1a1a; /* Dark background */
+   
     color: white;
     margin: 50px auto; /* Centering */
     box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1); /* Soft glow */

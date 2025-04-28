@@ -1,7 +1,9 @@
 // src/QuizExplanations.js
 import React from 'react';
 
-const QuizExplanations = ({quizData, userAnswers, onRetake, navigate, readOnly}) => {
+const QuizExplanations = ({quizData, userAnswers, onRetake, onBackToResults, navigate, readOnly, quizType}) => {
+    console.log("QuizExplanations loaded");
+    console.log("QuizExplanations loaded, readOnly = ", readOnly);
 
     return (
         <div className="card text-white bg-dark border" >
@@ -36,8 +38,18 @@ const QuizExplanations = ({quizData, userAnswers, onRetake, navigate, readOnly})
                         <button className="btn btn-primary me-2" onClick={onRetake}>
                         Retake Quiz
                         </button>
-                        <button className="btn btn-secondary me-2" onClick={() => navigate('/quiz-generator/ai')}>
+                        <button className="btn btn-secondary me-2" onClick={() => navigate(`/quiz-generator/${quizType}`)}>
                         New Quiz
+                        </button>
+                        <button className="btn btn-info me-2" onClick={() => {
+                        console.log("Button clicked"); 
+                        onBackToResults();
+                        }}>
+                        Back to Results
+                        </button>
+
+                        <button className="btn me-2 btn-danger" onClick={() => navigate('/')}>
+                        Exit
                         </button>
                     </div>
                 )}

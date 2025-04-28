@@ -16,8 +16,8 @@ const AuthForm = ({
 
     return (
         <div className="form-wrapper">
-            <div className="form-container">
-                <form onSubmit={onSubmit} className="bg-gray-3 p-4 rounded-lg shadow-md">
+            <div className="form-container bg-dark">
+                <form onSubmit={onSubmit} className="p-4 rounded-lg shadow-md">
                     <h1 className="text-white text-center mb-3">{isLogin ? "Login" : "Create Account"}</h1>
                     {!isLogin && (
                         <div className="form-group">

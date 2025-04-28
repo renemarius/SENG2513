@@ -12,7 +12,7 @@ import MyQuizzes from "./pages/MyQuizzes";
 import ExplanationPage from './pages/ExplanationPage';
 import AttemptPage from './pages/AttemptPage';
 import RetakeQuiz from './components/RetakeQuiz'
-//import QuizSelection from "./components/QuizSelection"; // Make sure to use your existing component
+import QuizSelection from "./components/QuizSelection";
 
 function App() {
   /*const isLogin = localStorage.getItem("isLogin") === "true";*/
@@ -22,6 +22,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} /> 
           <Route path="/login" element={<Login />} />
+          <Route path="/QuizSelection" element={<QuizSelection />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/take-quiz" element={<TakeQuiz />} />
           <Route path="/profile" element={<Profile />} />
