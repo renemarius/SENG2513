@@ -29,6 +29,7 @@ function App() {
           <Route path="/my-quizzes" element={<MyQuizzes />} />
           <Route path="/quiz-generator/:type" element={<QuizGenerator />} />
           <Route path="/attempts/:quizID" element={<AttemptPage />} />
+          <Route path="/attempts" element={<AttemptPage />} />
           <Route path="/retake-quiz/:quizID" element={<RetakeQuiz />} />
           <Route path="/explanations/:explanationID" element={<ExplanationPage />} />
         </Route>

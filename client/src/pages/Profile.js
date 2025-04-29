@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import icon from "../assets/person-icon-1.png";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [user, setUser] = useState({
@@ -10,6 +11,8 @@ const Profile = () => {
         averageScore: "0%",
         questionsAnswered: 0,
     });
+
+    const navigate = useNavigate();
     
     useEffect(() => {
         const userID = localStorage.getItem("userID");
@@ -95,16 +98,24 @@ const Profile = () => {
                 src={icon} 
                 alt="Profile" 
                 className="rounded-circle" 
-                style={{ width: '120px', height: '120px', objectFit: 'cover', border: '5px solid white', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}
+                style={{ width: '120px', 
+                         height: '120px', 
+                         objectFit: 'cover', 
+                         border: '5px solid white', 
+                         boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}
               />
             </div>
       
             {/* Top Buttons */}
             <div className="d-flex justify-content-between mt-5 px-3 w-100">
-              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }}>
+              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }} 
+                  onClick={() => navigate('/my-quizzes')} 
+              >
                 <i className="bi bi-collection" style={{ marginRight: '4px' }}></i> Quizzes
               </div>
-              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }}>
+              <div style={{ color: '#3a7bd5', fontSize: '14px', cursor: 'pointer' }}
+                    onClick={() => navigate('/attempts')}
+              >
                 <i className="bi bi-award" style={{ marginRight: '4px' }}></i> Attempts
               </div>
             </div>
@@ -133,10 +144,86 @@ const Profile = () => {
             </div>
       
             {/* Show More Button */}
-            <button className="btn btn-primary rounded-pill px-4">Take New Quiz</button>
-      
+            <div className="dropdown">
+              <button 
+                className="btn btn-primary rounded-pill px-4 py-2 d-flex align-items-center gap-2" 
+                type="button" 
+                id="quizDropdown" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+                style={{
+                  fontWeight: '600',
+                  fontSize: '16px',
+                  borderColor: '#0d6efd'
+                }}
+              >
+                Take New Quiz 
+                <i className="bi bi-chevron-down" style={{ fontSize: '14px' }}></i>
+              </button>
+
+              <ul 
+                className="dropdown-menu border-0 shadow-sm text-center"
+                aria-labelledby="quizDropdown"
+                style={{
+                  borderRadius: '1rem',
+                  backgroundColor: '#ffffff',
+                  padding: '0.25rem 0',
+                  marginTop: '0',
+                  minWidth: '180px'
+                }}
+              >
+                <li>
+                  <div
+                    className="dropdown-item fw-semibold py-2"
+                    onClick={() => navigate('/quiz-generator/ai')}
+                    style={{
+                      fontSize: '14px',
+                      color: '#6c757d',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      borderRadius: '0.5rem'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#0d6efd';
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#6c757d';
+                    }}
+                  >
+                    <span role="img" aria-label="Brain">🧠</span> AI Quiz
+                  </div>
+                </li>
+                <li>
+                  <div
+                    className="dropdown-item fw-semibold py-2"
+                    onClick={() => navigate('/quiz-generator/trivia')}
+                    style={{
+                      fontSize: '14px',
+                      color: '#6c757d',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      borderRadius: '0.5rem'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#0d6efd';
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#6c757d';
+                    }}
+                  >
+                    <span role="img" aria-label="Target">🎯</span> Trivia Quiz
+                  </div>
+                </li>
+              </ul>
+            </div>
+
           </div>
-      
         </div>
     );
 };

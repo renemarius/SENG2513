@@ -1,7 +1,9 @@
+// components/Layout.js
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import HomeNavbar from "./HomeNavbar";
 import QuizNavbar from "./QuizNavbar";
 import Footer from "./Footer";

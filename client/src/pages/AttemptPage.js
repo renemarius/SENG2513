@@ -14,7 +14,12 @@ const AttemptPage = () => {
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        const res = await axios.get(`/api/result/attempts/${userID}/${quizID}`);
+        let res;
+        if(quizID) {
+          res = await axios.get(`/api/result/attempts/${userID}/${quizID}`);
+        } else {
+          res = await axios.get(`/api/result/attempts/${userID}`);
+        }
         setAttempts(res.data);
         setLoading(false);
       } catch (err) {
@@ -50,7 +55,7 @@ const AttemptPage = () => {
   return (
     <div className="container pt-4 pb-4">
       <div className="card text-white rounded-4 shadow-sm p-4" style={{ backgroundColor: '#1a1a1a' }}>
-        <h2 className="mb-4">Past Attempts</h2>
+        <h2 className="mb-4 text-center" style={{ color: '#28a745' }}>Past Attempts</h2>
         {attempts.map((attempt, index) => (
             <div
                 key={index}
@@ -72,7 +77,7 @@ const AttemptPage = () => {
                         onClick={() => onViewExplanations(attempt.explanationID)}
                     >
                         <div className='p-2'>
-                            <strong>Attempt #{index + 1}</strong>
+                            <strong>{attempt.title} Quiz - Attempt #{index + 1}</strong>
                             <div>
                             <small>
                                 Taken on {new Date(attempt.createdAt).toLocaleString()}

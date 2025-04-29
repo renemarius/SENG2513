@@ -36,6 +36,10 @@ const Attempts = sequelize.define('attempts', {
       key: 'explanationID',
     },
   },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   score: {
     type: DataTypes.INTEGER,
     allowNull: false,

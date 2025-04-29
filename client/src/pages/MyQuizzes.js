@@ -77,7 +77,7 @@ const MyQuizzes = () => {
     return (
         <div className="container pt-4 pb-4 px-4">
             <div className="card text-white border-0 rounded-4 shadow-sm p-4" style={{ backgroundColor: '#1a1a1a' }}>
-                <h2 className="mb-4">My Quizzes</h2>
+                <h2 className="mb-4 text-center" style={{ color: '#28a745' }} >My Quizzes</h2>
             
                 {quizzes.length === 0 ? (
                 <p>You haven't saved any quizzes yet.</p>

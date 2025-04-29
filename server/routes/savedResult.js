@@ -18,6 +18,7 @@ router.post('/save-results', async (req, res) => {
             userID,
             quizID,
             explanationID,
+            title: topic,
             score,
             totalQuestions: total,
             createdAt: new Date(),
